@@ -1,0 +1,20 @@
+﻿
+@{
+    Layout = Request.IsAjaxRequest() ? null : "~/Views/Shared/_LayoutIndex.cshtml";
+}
+@{
+    ViewBag.Title = "Trang chủ";
+}
+
+@Html.Action("SliderBannerIndexPartial", "Images")
+
+@Html.Action("ListProductFeaturePartial", "Productz")
+
+@Html.Action("ListNewCollectionPartial", "Productz")
+
+@Html.Action("ListRandomProductPartial", "Productz")
+
+@Html.Action("ListLogoProductPartial", "Productz")
+
+
+

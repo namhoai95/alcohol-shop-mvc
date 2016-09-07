@@ -1,0 +1,13 @@
+﻿@using WebMVC.ViewModels
+@model WebMVC.ViewModels.RegisterViewModel
+@{
+    Layout = Request.IsAjaxRequest() ? null : "~/Views/Shared/_LayoutIndex.cshtml";
+}
+@{
+    ViewBag.Title = "Register";
+}
+
+<div id="con-m">
+    @Html.Action("LoginPartialView", "Fteam")
+</div>
+

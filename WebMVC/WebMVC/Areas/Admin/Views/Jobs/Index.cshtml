@@ -1,0 +1,121 @@
+﻿@model PagedList.IPagedList<WebMVC.Models.Job>
+@using PagedList.Mvc
+
+@{
+    Layout = Request.IsAjaxRequest() ? null : "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+@{
+    ViewBag.Title = "Danh sách bài viết";
+}
+@{
+
+}
+<div class="page-content">
+    <div id="table-advanced" class="row">
+        <div class="col-lg-12">
+            <ul id="tableadvancedTab" class="nav nav-tabs">
+                <li class="active"><a href="#table-sorter-tab" data-toggle="tab">Danh sách thông tin tuyển dụng</a></li>
+                <li class="active">
+
+                    @Html.Raw(@Ajax.ActionLink("lthema1", "Create", "Jobs", null,
+                                   new AjaxOptions
+                                   {
+                                       UpdateTargetId = "m-content"
+                                   }, new { @class = "AjaxLink" }).ToHtmlString().Replace("lthema1", "Tạo mới"))
+
+
+
+                </li>
+
+            </ul>
+            <style>
+                #m-content-table tbody tr td a {
+                    color: white !important;
+                }
+
+                #m-content-table tbody tr td .detailz a {
+                    color: #999999 !important;
+                }
+            </style>
+            <div id="tableadvancedTabContent" class="tab-content">
+                <div id="table-sorter-tab" class="tab-pane fade in active">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h3 class="mtn">Danh sách</h3>
+                            <table class="table table-hover table-striped table-bordered table-advanced tablesorter" id="m-content-table">
+                                <thead>
+                                    <tr>
+                                        <th width="3%"><input type="checkbox" class="checkall" /></th>
+                                        <th width="5%">##</th>
+                                        <th width="10%">Tiêu đề</th>
+                                        <th width="10%">Tác giả</th>
+
+                                        <th width="12%">Ngày tạo</th>
+
+                                        <th width="9%">Tác vụ</th>
+                                        
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{ int i = 1;}
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td><input type="checkbox" /></td>
+                                            <td>@i</td>
+                                            <td>
+                                                @item.title
+                                            </td>
+
+                                            <td>@item.usercreate</td>
+
+                                            <td>@item.day</td>
+
+                                            
+                                            <td>
+                                                <button type="button" class="btn btn-default btn-xs detailz">
+                                                    @Html.Raw(Html.ActionLink("btn" + i, "Details", "Jobs", new { id = item.id }, new { @class = "AjaxLink" }).ToHtmlString().Replace("btn" + i, "<i class='fa info-circle' aria-hidden='true'></i>&nbsp;Xem"))
+                                                </button>
+                                                @if (item.TrangThai == true)
+                                                {
+
+                                                    <button type="button" class="btn btn-danger btn-xs">
+                                                        @Html.Raw(@Ajax.ActionLink("btn" + i, "Lock", "Jobs", new { id = item.id }, new AjaxOptions { UpdateTargetId = "m-content" }).ToHtmlString().Replace("btn" + i, "<i class='fa fa-lock' aria-hidden='true'></i>&nbsp;Đang hoạt động"))
+
+                                                    </button>
+                                                }
+                                                else
+                                                {
+                                                    <button type="button" class="btn btn-danger btn-xs">
+                                                        @Html.Raw(@Ajax.ActionLink("btn" + i, "UnLock", "Jobs", new { id = item.id }, new AjaxOptions { UpdateTargetId = "m-content" }).ToHtmlString().Replace("btn" + i, "<i class='fa fa-unlock' aria-hidden='true'></i>&nbsp;Khoá"))
+                                                    </button>
+                                                }
+
+                                            </td>
+                                        </tr>
+                                        i++;
+                                    }
+
+
+
+
+                                </tbody>
+                            </table>
+                            <hr class="mtxl mbxl" />
+
+
+                        </div>
+                    </div>
+                </div>
+                @Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
+                <div id="table-color-tab" class="tab-pane fade">
+                    <div class="row" id="tab-create-account">
+
+
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</div>

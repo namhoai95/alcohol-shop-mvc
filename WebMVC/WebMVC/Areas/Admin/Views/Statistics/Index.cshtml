@@ -1,0 +1,189 @@
+﻿@model IEnumerable<WebMVC.Models.Order>
+
+@{
+    Layout = Request.IsAjaxRequest() ? null : "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+<link href="~/Scripts/vendors/jplist/html/css/vendor/jquery-ui.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-3.0.0.js"></script>
+<script src="~/Scripts/jquery-ui.js"></script>
+<script>
+    $(function () {
+        var d = new Date();
+        var selectYear = document.getElementById("year");
+        for (var i = 2010; i <= d.getFullYear() ; i++) {
+            option = document.createElement('option');
+            option.value = option.text = i;
+            selectYear.add(option);
+        }
+        var selectMonth = document.getElementById("month");
+        for (var i = 0; i < 12; i++) {
+            option = document.createElement('option');
+            option.value = option.text = i + 1;
+            selectMonth.add(option);
+        }
+        $('#search').click(function () {
+            var m = $('#month').val();
+            var y = $('#year').val();
+            var row = [];
+            var sum = 0;
+            var sumMoney = 0;
+            var month = [];
+            var maHD = [];
+            var tongTien = [];
+            var soLuong = [];
+            var thangMua = [];
+            var revenue = [];
+            if (m === 'thang' && y !== 'nam') {
+                $.ajax({
+                    url: '/Admin/Statistics/RevenueYear',
+                    type: 'POST',
+                    dataType: "json",
+                    data: { Month: m, Year: y },
+                    success: function (data) {
+                        $.each(data, function (index, item) {
+                            sumMoney = item.SumMoney;
+                            revenue.push(sumMoney);
+                            month.push(item.Month);
+                            for (var i = 0; i < item.MaHD.length; i++) {
+                                maHD.push(item.MaHD[i]);
+                                soLuong.push(item.SoLuong[i]);
+                                tongTien.push(item.TongTien[i]);
+                                thangMua.push(item.MonthBuy[i]);
+                            }
+                        });
+                        for (var i = 0; i < maHD.length; i++) {
+                            sum += tongTien[i];
+                            row.push("<tr><td>" +
+                                maHD[i] +
+                                "</td><td>" +
+                                soLuong[i] +
+                                "</td><td>" +
+                                tongTien[i] +
+                                "</td><td>" +
+                                thangMua[i] +
+                                "</td></tr>");
+                        }
+                        $("#revenue").html(row);
+                        drawChartYear(month, revenue);
+                        sum = "Tổng tiền: " + sum;
+                        $("#sumMoney").html(sum);
+                    }
+                });
+            } else {
+                $.ajax({
+                    url: '/Admin/Statistics/Revenue',
+                    type: 'POST',
+                    dataType: "json",
+                    data: { Month: m, Year: y },
+                    success: function (data) {
+                        $.each(data, function (index, item) {
+                            sumMoney = item.SumMoney;
+                            month.push(item.Month);
+                            for (var i = 0; i < item.MaHD.length; i++) {
+                                maHD.push(item.MaHD[i]);
+                                soLuong.push(item.SoLuong[i]);
+                                tongTien.push(item.TongTien[i]);
+                                thangMua.push(item.MonthBuy[i]);
+                            }
+                        });
+                        for (var i = 0; i < maHD.length; i++) {
+                            sum += tongTien[i];
+                            row.push("<tr><td>" + maHD[i] + "</td><td>" + soLuong[i] + "</td><td>" + tongTien[i] + "</td><td>" + thangMua[i] + "</td></tr>");
+                        }
+                        $("#revenue").html(row);
+                        drawChart(month, sumMoney);
+                        sum = "Tổng tiền: " + sum;
+                        $("#sumMoney").html(sum);
+                    }
+                });
+            }
+            function drawChart(month, sumMoney) {
+                var data = new google.visualization.DataTable();
+                data.addColumn('number', 'Tháng');
+                data.addColumn('number', 'Tổng Doanh Thu');
+                for (var i = 0; i < month.length; i++) {
+                    data.addRows([[month[i], sumMoney]]);
+                }
+
+                var options = {
+                    chart: {
+                        title: 'Thống Kê Doanh Thu',
+                        subtitle: 'Tháng, Tổng Doanh Thu'
+                    }
+                };
+
+                var chart = new google.charts.Bar(document.getElementById('columnchart_material'));
+
+                chart.draw(data, options);
+            }
+            function drawChartYear(month, revenue) {
+                var data = new google.visualization.DataTable();
+                data.addColumn('number', 'Tháng');
+                data.addColumn('number', 'Tổng Doanh Thu');
+                for (var i = 0; i < month.length; i++) {
+                    data.addRows([[month[i], revenue[i]]]);
+                }
+
+                var options = {
+                    chart: {
+                        title: 'Thống Kê Doanh Thu',
+                        subtitle: 'Tháng, Tổng Doanh Thu'
+                    }
+                };
+
+                var chart = new google.charts.Bar(document.getElementById('columnchart_material'));
+
+                chart.draw(data, options);
+            }
+        });
+    });
+</script>
+<div class="page-content">
+    <div class="table-container">
+        <div class="row mbl">
+            <div class="col-lg-6">
+                <div class="input-group input-group-sm mbs">
+                    <div class="col-lg-12">
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                                <select id="month" class="form-control" name="month">
+                                    <option value="thang">Tháng</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                                <select id="year" class="form-control" name="year">
+                                    <option value="nam">Năm</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <span class="input-group-btn">
+                                <input class="btn btn-success dropdown-toggle" id="search" type="submit" name="search" value="Tìm kiếm" />
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="columnchart_material" style="width: 500px; height: 500px;margin: auto"></div>
+        <div class="panel panel-blue">
+            <div class="panel-heading col-lg-12">
+                <div class="caption col-lg-6">Danh sách đơn hàng</div>
+            </div>
+            <div class="panel-body">
+                <table class="table table-hover table-striped table-bordered table-advanced tablesorter">
+                    <tr>
+                        <th class="talbe-head" width="5%">Mã Hóa Đơn</th>
+                        <th class="talbe-head" width="5%">Số lượng</th>
+                        <th class="talbe-head" width="5%">Tổng Tiền</th>
+                        <th class="talbe-head" width="5%">Tháng</th>
+                    </tr>
+                    <tbody id="revenue"></tbody>
+                </table>
+                <span style="float: right" class="label label-success" id="sumMoney" />
+            </div>
+        </div>
+    </div>
+</div>

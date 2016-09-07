@@ -1,0 +1,199 @@
+﻿@model WebMVC.Models.Website
+
+@{
+    Layout = Request.IsAjaxRequest() ? null : "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+@{
+    ViewBag.Title = "Cập nhật thông tin website";
+}
+
+<div id="tab-form-seperated" class="tab-pane">
+    <style>
+        .panel.panel-yellow {
+            border-color: #483752 !important;
+        }
+
+            .panel.panel-yellow > .panel-heading {
+                background: #483752 !important;
+                border-color: #483752 !important;
+            }
+
+        .lka button a {
+            color: white;
+        }
+    </style>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-yellow">
+                <div class="panel-heading">Form Seperated</div>
+                <div class="panel-body pan">
+
+                    @using (Ajax.BeginForm("Edit", "Websites", null, new AjaxOptions()
+                    {
+                        UpdateTargetId = "tab-form-seperated",
+                        HttpMethod = "POST"
+
+
+                    }, new { @class = "form-horizontal form-seperated", role = "form" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <div class="form-body">
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+
+                            <div class="form-group">
+                                @if (TempData["Success"] != null)
+                                {
+                                    <script>
+                                        thongbaothanhcong("Thông báo", "Thao tác thành công");
+                                    </script>
+                                }
+                                @if (ViewData["Error"] != null)
+                                {
+                                    if (@ViewData["Error"].ToString().Equals("1"))
+                                    {
+                                        <script>
+
+                                            thongbao2s("Thông báo lỗi", "Tài khoản không tồn tại");
+                                        </script>
+                                    }
+
+                                    else
+                                    {
+                                        <script>
+
+                                         thongbao2s("Thông báo lỗi", "Lỗi không xác định");
+                                        </script>
+                                    }
+                                }
+                                @Html.LabelFor(model => model.sdt1, htmlAttributes: new { @class = "col-md-3 control-label" })
+                                <div class="col-md-4">
+
+                                    @Html.EditorFor(model => model.sdt1, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.sdt1, "", new { @class = "text-danger" })
+                                    @Html.HiddenFor(model => model.id, new { htmlAttributes = new { @class = "form-control" } })
+
+
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.sdt2, htmlAttributes: new { @class = "col-md-3 control-label" })
+                                <div class="col-md-4">
+
+                                    @Html.EditorFor(model => model.sdt2, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.sdt2, "", new { @class = "text-danger" })
+
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.email, htmlAttributes: new { @class = "col-md-3 control-label" })
+
+                                <div class="col-md-4">
+                                    <div class="input-icon">
+                                        <i class="fa fa-envelope"></i>
+                                        @Html.EditorFor(model => model.email, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.email, "", new { @class = "text-danger" })
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.diachi, htmlAttributes: new { @class = "col-md-3 control-label" })
+                                <div class="col-md-4">
+
+                                    @Html.EditorFor(model => model.diachi, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.diachi, "", new { @class = "text-danger" })
+
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.skype, htmlAttributes: new { @class = "col-md-3 control-label" })
+                                <div class="col-md-4">
+
+                                    @Html.EditorFor(model => model.skype, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.skype, "", new { @class = "text-danger" })
+
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.facebook, htmlAttributes: new { @class = "col-md-3 control-label" })
+                                <div class="col-md-4">
+
+                                    @Html.EditorFor(model => model.facebook, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.facebook, "", new { @class = "text-danger" })
+
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.twitter, htmlAttributes: new { @class = "col-md-3 control-label" })
+                                <div class="col-md-4">
+
+                                    @Html.EditorFor(model => model.twitter, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.twitter, "", new { @class = "text-danger" })
+
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.googlemap, htmlAttributes: new { @class = "col-md-3 control-label" })
+                                <div class="col-md-4">
+
+                                    @Html.EditorFor(model => model.googlemap, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.googlemap, "", new { @class = "text-danger" })
+
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.tenshop, htmlAttributes: new { @class = "col-md-3 control-label" })
+                                <div class="col-md-4">
+
+                                    @Html.EditorFor(model => model.tenshop, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.tenshop, "", new { @class = "text-danger" })
+
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.linkWebsites, htmlAttributes: new { @class = "col-md-3 control-label" })
+                                <div class="col-md-4">
+
+                                    @Html.EditorFor(model => model.linkWebsites, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.linkWebsites, "", new { @class = "text-danger" })
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-actions text-right pal lka">
+                            <button type="submit" class="btn btn-primary">Lưu</button>
+                            &nbsp;
+                            <button type="button" class="btn btn-green">
+                                @Html.ActionLink("Huỷ", "Index", "Websites")
+                            </button>
+                        </div>
+                    }
+
+                    <script>
+    var kiemtraketqua = function(result)
+    {
+        var rs = JSON.parse(result.responseText);
+        if (rs != null) {
+            if(rs.error != 0)
+            {
+                thongbao2s("Thông báo lỗi", rs.msg);
+            } else {
+                thongbaothanhcong("Thông báo", rs.msg);
+            }
+        }
+
+    }
+                    </script>
+
+
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+

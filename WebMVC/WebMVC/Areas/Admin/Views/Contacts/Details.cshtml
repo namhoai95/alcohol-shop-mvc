@@ -1,0 +1,131 @@
+﻿@using WebMVC.Areas.Admin.Models
+@model ContactView
+
+@{
+    Layout = Request.IsAjaxRequest() ? null : "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+@{
+    ViewBag.Title = "Quản lý thông tin liên hệ";
+}
+
+<div class="page-content">
+    <div class="row">
+        <div class="col-sm-3 col-md-2">
+            <div class="btn-group btn-group-sm">
+                <button type="button" data-toggle="dropdown" class="btn btn-primary dropdown-toggle">
+                    Mail
+                    &nbsp;<span class="caret"></span>
+                </button>
+                <ul role="menu" class="dropdown-menu">
+                    <li><a href="#">Mail</a></li>
+
+                </ul>
+            </div>
+        </div>
+        <div class="col-sm-9 col-md-10">
+
+        </div>
+    </div>
+    <div class="mtl mbl"></div>
+    <div class="row">
+        <div class="col-sm-3 col-md-2">
+            <a href="#" role="button" class="btn btn-danger btn-sm btn-block">Tạo mới</a>
+
+            <div class="mtm mbm"></div>
+            <div class="panel">
+                <div class=" pan">
+                    <ul style="background: #fff" class="nav nav-pills nav-stacked">
+                        <li class="active">
+                            <a href="#">
+                                <span class="badge pull-right">
+                                    @Model.totalRecord
+                                </span>
+                                <i class="fa fa-inbox fa-fw mrs"></i>Hộp thư
+                            </a>
+
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fa fa-info-circle fa-fw mrs"></i>Thư đã gửi
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="#">
+                                <span class="badge badge-orange pull-right">0</span>
+                                <i class="fa fa-edit fa-fw mrs"></i>Thùng rác
+                            </a>
+
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <hr />
+
+        </div>
+        <div class="col-sm-9 col-md-10">
+            <ul class="nav nav-tabs">
+                <li class="active">
+                    <a href="#home" data-toggle="tab">
+                        <span class="glyphicon glyphicon-inbox"></span>&nbsp;
+                        Primary
+                    </a>
+                </li>
+
+            </ul>
+            <div class="compose-mail">
+                <div class="portlet box portlet-white">
+
+                    <div class="portlet-header">
+                        <div class="caption">@Model.tieude</div>
+                        <div class="tools">
+                            @Html.Raw(@Ajax.ActionLink("lthema2", "Index", "Contacts", null,
+                                   new AjaxOptions
+                                   {
+                                       UpdateTargetId = "m-content"
+                                   }, new { @class = "AjaxLink btn btn-default btn-xs" }).ToHtmlString().Replace("lthema2", "<i class='fa fa-mail-reply mln'></i>&nbsp;Trở về"))
+
+                            &nbsp;
+                        </div>
+                    </div>
+                    <div class="portlet-body">
+                        <div class="mail-content">
+                            <div class="mail-sender">
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <img src="https://s3.amazonaws.com/uifaces/faces/twitter/kolage/48.jpg" alt="" width="30px" class="img-circle mrm" />
+                                        <strong>@Model.name</strong> <span>[@Model.email]</span>&nbsp;
+                                        đến
+                                        &nbsp;<strong>tôi</strong>
+                                    </div>
+                                    <div class="col-md-4"><p class="date"> @Model.thoigian</p></div>
+                                </div>
+                            </div>
+                            <div class="mail-view">
+                                <p>
+                                    @Model.noidung
+                                </p>
+
+                            </div>
+
+                            <div class="clearfix"></div>
+                            <hr />
+                            <p>
+                                
+                                @Html.Raw(@Ajax.ActionLink("lthema1", "Index", "Contacts", null,
+                                   new AjaxOptions
+                                   {
+                                       UpdateTargetId = "m-content"
+                                   }, new { @class = "AjaxLink btn btn-default btn-xs" }).ToHtmlString().Replace("lthema1", "<i class='fa fa-mail-reply mln'></i>&nbsp;Trở về"))
+                                &nbsp;
+                            </p>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

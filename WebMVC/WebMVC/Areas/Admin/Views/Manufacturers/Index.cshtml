@@ -1,0 +1,144 @@
+﻿@model PagedList.IPagedList<WebMVC.Models.Manufacturer>
+@using PagedList.Mvc;
+@{
+    Layout = Request.IsAjaxRequest() ? null : "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+@{
+    ViewBag.Title = "Danh sánh hãng sản xuất";
+}
+
+@if (ViewData["Error"] != null)
+{
+    if (@ViewData["Error"].ToString().Equals("1"))
+    {
+        <script>
+            thongbao2s("Thông báo lỗi", "Không được xóa hãng sản xuất này");
+        </script>
+    }
+    else
+    {
+        <script>
+            thongbao2s("Thông báo lỗi", "Lỗi không xác định");
+        </script>
+    }
+}
+<link href="~/Scripts/vendors/jplist/html/css/vendor/jquery-ui.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-3.0.0.js"></script>
+<script src="~/Scripts/jquery-ui.js"></script>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $("#txtName").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/Admin/Manufacturers/autoCompleteSeach",
+                    type: "POST",
+                    dataType: "json",
+                    data: { Prefix: request.term },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return { label: item.TenHangSanXuat, value: item.TenHangSanXuat };
+                        }))
+                    }
+                })
+            },
+            messages: {
+                noResults: "", results: ""
+            }
+        });
+    })
+</script>
+<div class="page-content">
+    <div class="table-container">
+        <div class="row mbl">
+            <div class="col-lg-6">
+                <div class="input-group input-group-sm mbs">
+                    @using (Ajax.BeginForm("Search", "Manufacturers", null, new AjaxOptions()
+                    {
+                        UpdateTargetId = "m-content",
+                        HttpMethod = "POST"
+
+                    }, new { @class = "form-horizontal form-seperated", role = "form" }))
+                    {
+                        <div class="col-lg-12">
+                            <div class="col-lg-9">
+                                <input id="txtName" class="form-control" type="text" placeholder="Nhập tên hãng sản xuất tại đây..." name="txtName" />
+                            </div>
+                            <div class="col-lg-3">
+                                <span class="input-group-btn">
+                                    <input class="btn btn-success dropdown-toggle" type="submit" name="seach" value="Tìm kiếm" />
+                                </span>
+                            </div>
+                        </div>
+                    }          
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-blue">
+            <div class="panel-heading col-lg-12">
+                <div class="caption col-lg-6">Danh sách hãng sản xuất</div>
+                <div class="actions col-lg-6">
+                    @Html.Raw(@Ajax.ActionLink("add", "Create", "Manufacturers", null,
+         new AjaxOptions
+         {
+             UpdateTargetId = "m-content"
+         }, new { @class = "AjaxLink btn btn-info btn-sm", @style = "float:right" }).ToHtmlString().Replace("add", "<i class='fa fa-plus'></i>&nbsp; Hãng sản xuất mới"))
+                </div>
+            </div>
+            <div class="panel-body">
+                <table class="table table-hover table-striped table-bordered table-advanced tablesorter">
+                    <tr>
+                        <th class="talbe-head" width="5%">Mã hãng</th>
+                        <th class="talbe-head">Tên hãng</th>
+                        <th class="talbe-head" width="12%">Ngày tạo</th>
+                        <th class="talbe-head" width="12%">Ngày cập nhật</th>
+                        <th class="talbe-head" width="15%">Ghi chú</th>
+                        <th class="talbe-head" width="9%">Tình trạng</th>
+                        <th class="talbe-head" width="21%">Actions</th>
+                    </tr>
+
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(modelItem => item.Ma)</td>
+                            <td>@Html.DisplayFor(modelItem => item.TenHangSanXuat)</td>
+                            <td>@Html.DisplayFor(modelItem => item.NgayTao)</td>
+                            <td>@Html.DisplayFor(modelItem => item.NgayCapNhat)</td>
+                            <td>@Html.DisplayFor(modelItem => item.GhiChu)</td>
+                            <td><span class="label label-sm label-success">@Html.DisplayFor(modelItem => item.TrangThai1.TenTrangThai)</span></td>
+                            <td>
+                                @Html.Raw(@Ajax.ActionLink("edit", "Edit", "Manufacturers",
+                                new { id = item.ID },
+                                new AjaxOptions { UpdateTargetId = "m-content" },
+                                new { @class = "AjaxLink btn btn-danger btn-xs" }).ToHtmlString().Replace("edit", "<i class='fa fa-edit'></i>&nbsp; Sửa"))
+
+                                @Html.Raw(@Ajax.ActionLink("delete", "Delete", "Manufacturers",
+                                new { id = item.ID },
+                                new AjaxOptions { UpdateTargetId = "m-content" },
+                                new { @class = "btn btn-danger btn-xs" }).ToHtmlString().Replace("delete", "<i class='fa fa-trash-o'></i>&nbsp; Xóa"))
+
+                                @if (item.TrangThai != 3)
+                                {
+                                    @Html.Raw(@Ajax.ActionLink("lock", "Lock", "Manufacturers",
+                                    new { id = item.ID },
+                                    new AjaxOptions { UpdateTargetId = "m-content" },
+                                    new { @class = "btn btn-danger btn-xs" }).ToHtmlString().Replace("lock", "<i class='fa fa-lock'></i>&nbsp; Khóa"))
+                                }
+                                else
+                                {
+                                    @Html.Raw(@Ajax.ActionLink("unlock", "unLock", "Manufacturers",
+                                    new { id = item.ID },
+                                    new AjaxOptions { UpdateTargetId = "m-content" },
+                                    new { @class = "btn btn-danger btn-xs" }).ToHtmlString().Replace("unlock", "<i class='fa fa-unlock'></i>&nbsp; Mở"))
+                                }
+                            </td>
+                        </tr>
+                    }
+                </table>
+
+                @Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
+            </div>
+        </div>
+    </div>
+</div>

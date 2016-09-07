@@ -1,0 +1,30 @@
+﻿@using WebMVC.Models
+
+
+@using (Ajax.BeginForm("SearchProduct", "Category", null, new AjaxOptions()
+{
+    UpdateTargetId = "mm-content",
+    OnSuccess = "loadC",
+    HttpMethod = "POST"
+
+}, new { @class = "form-horizontal form-seperated", role = "form" }))
+{
+    <div class="col-lg-12 col-md-12 col-sm-12">
+        <table id="search-bar-table">
+            <tr>
+                <td class="search-column-1">
+                    <p><span class="grey">Tìm kiếm sản phẩm</span></p>
+                    <input type="text" name="txtName" id="txtName" placeholder="Nhập tên sản phẩm tại đây">
+                </td>
+                <td class="search-column-2">
+                    <p class="align-right"><a href="#">Chọn loại sản phẩm</a></p>
+                    @Html.DropDownList("LoaiSP", null, htmlAttributes: new { @class = "chosen-select-search" })
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div id="search-button">
+        <input type="submit" value="">
+        <i class="icons icon-search-1"></i>
+    </div>
+}

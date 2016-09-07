@@ -1,0 +1,184 @@
+﻿
+@using WebMVC.ViewModels
+@model WebMVC.ViewModels.CompareView
+
+<div class="col-lg-12 col-md-12 col-sm-12">
+    @if (Model.listItem.Count <= 0)
+    {
+        <p>Danh sách rỗng</p>
+    }
+    else
+    {
+
+
+        <table class="compare-table" style=''>
+
+            <tr>
+                <th>Tên sản phẩm</th>
+                @foreach (var item in Model.listItem)
+                {
+                    <td style='color:red;text-align:center;'><h5><a href="#">@item.TenSanPham</a></h5></td>
+                }
+
+            </tr>
+
+            <tr>
+                <th>Hình ảnh</th>
+                @foreach (var item in Model.listItem)
+                {
+                    <td class="compare-image" style=''>
+                        <a href="#"><img src='@item.url_img' alt='@item.TenSanPham'></a>
+
+                    </td>
+                }
+
+            </tr>
+
+            <tr>
+                <th>Rating</th>
+                @foreach (var item in Model.listItem)
+                {
+                    <td style='text-align:center;'>
+
+                        <div class="rating readonly-rating" data-score='@item.Nrate'></div>
+
+                    </td>
+                }
+
+            </tr>
+
+            <tr>
+                <th>Giá</th>
+                @foreach (var item in Model.listItem)
+                {
+                    <td style=''>
+                        <span class="price">
+                            @string.Format("{0:#,#.##}", item.GiaKhuyenMai) VNĐ
+                        </span>
+                    </td>
+                }
+
+            </tr>
+
+            <tr>
+                <th>Mô tả</th>
+                @foreach (var item in Model.listItem)
+                {
+                    <td style=''><p> @item.MoTa </p></td>
+                }
+
+
+            </tr>
+
+            <tr>
+                <th>Thương hiệu</th>
+                @foreach (var item in Model.listItem)
+                {
+                    <td style=''><p>@item.Manufacturer.TenHangSanXuat</p></td>
+                }
+
+
+            </tr>
+
+            <tr>
+                <th>Năm sản xuất</th>
+                @foreach (var item in Model.listItem)
+                {
+                    <td style=''><p><span class="green">@item.NamSanXuat</span></p></td>
+                }
+
+            </tr>
+
+            <tr>
+                <th>Dung tích L</th>
+                @foreach (var item in Model.listItem)
+                {
+                    <td style=''><p>@item.DungTich L</p></td>
+                }
+
+            </tr>
+
+            <tr>
+                <th>Nồng độ %</th>
+                @foreach (var item in Model.listItem)
+                {
+                    <td style=''><p>@item.NongDo %</p></td>
+                }
+
+            </tr>
+
+
+
+            <tr>
+                <th>Thao tác</th>
+                @foreach (var item in Model.listItem)
+                {
+                    <td style='text-align:center;'>
+
+
+                        <span class="add-to-cart">
+                            @Html.Raw(@Ajax.ActionLink("lthemac", "AddToCart", "ShoppingCart", new { id = item.ID },
+                                        new AjaxOptions
+                                        {
+                                            HttpMethod = "POST",
+                                            OnSuccess = "loadTB"
+                                        }, new { @class = "", title = "Thêm giỏ hàng" })
+                                   .ToHtmlString()
+                                   .Replace("lthemac", "<span class='action-wrapper' style='color:white;'><i class='icons icon-basket-2'></i><span class='action-name'></span></span>"))
+
+                        </span>
+
+
+                        <span class="add-to-trash">
+                            @Html.Raw(@Ajax.ActionLink("lthemab", "Remove", "Cartz", new { id = item.ID },
+                                        new AjaxOptions
+                                        {
+                                            HttpMethod = "POST",
+                                            OnSuccess = "loadComparezz1"
+                                        }, new { @class = "", title = "Xoá" })
+                                                   .ToHtmlString()
+                                                   .Replace("lthemab", "<span class='action-wrapper' style='color:white;'><i class='icons icon-trash-8'></i><span class='action-name'></span></span>"))
+
+
+                        </span>
+
+                    </td>
+                }
+
+
+            </tr>
+
+
+
+        </table>
+    }
+
+
+</div>
+<script src="~/Scripts/jspage.js"></script>
+<script>
+    var loadComparezz1 = function (result) {
+        console.log(result)
+        if (result.error == -1) {
+            console.log("Loi ....")
+            //thongbao2s("Thông báo", "Vui lòng đăng nhập")
+        } else {
+            thongbaosuccess2s("Thông báo", "Thành công !")
+            $.ajax({
+                url: "/Cartz",
+                type: "GET",
+                success: function (result) {
+                    $('#mm-content').html(result);
+                }
+            });
+            $.ajax({
+                url: "/Cartz/ComparePartialView",
+                type: "GET",
+                success: function (result) {
+                    $('#compare-content').html(result);
+                }
+            });
+
+        }
+    }
+</script>

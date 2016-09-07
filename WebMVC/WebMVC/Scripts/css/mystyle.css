@@ -1,0 +1,55 @@
+﻿.panel-body{
+    margin-top: 45px;
+}
+.panel-heading{
+    background-color: #e82a62 !important;
+    color:white;
+    font-size: 18px;
+}
+.btn-info, .btn-info:active, .btn-info:focus{
+    border-color: rebeccapurple;
+    border-radius:8px !important;
+    background-color: mediumpurple;
+}
+.btn-info:hover, .open .dropdown-toggle.btn-info{
+    border-color: #238a23;
+    border-radius:8px !important;
+    background-color: #24a524;
+}
+.btn-danger{
+    border-radius: 3px !important   ;
+}
+.talbe-head{
+    background-color: #428bca !important;
+    color: white;
+}
+.btn-success{
+    color: #ffffff;
+    background-color: #5cb85c;
+    border-color: #55b555;
+    border-radius:8px !important;
+    width:130px;
+}
+.btn-success:hover{
+    color: #ffffff;
+    background-color: #47a447;
+    border-color: #3e8f3e;
+}
+.btn-trove{
+    color: #ffffff !important;
+    background-color: #d9534f;
+    border-color: #d74b47;
+    border-radius:8px !important;
+    width:130px;
+}
+.btn-trove:hover{
+    color: #ffffff;
+    background-color: #d2322d;
+    border-color: #b92c28;
+}
+.lka button a {
+    color: white;
+}
+.control-nhan{
+    padding-top:20px;
+}

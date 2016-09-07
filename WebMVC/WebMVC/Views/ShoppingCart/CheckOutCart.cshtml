@@ -1,0 +1,155 @@
+﻿@using WebMVC.Models
+@using WebMVC.ViewModels
+@model WebMVC.ViewModels.OrderView
+@{
+    ViewBag.Title = "Shopping Cart";
+}
+@{
+
+    Layout = Request.IsAjaxRequest() ? null : "~/Views/Shared/_LayoutIndex.cshtml";
+}
+
+
+<div class="row">
+
+    <div class="col-lg-12 col-md-12 col-sm-12">
+
+        <div class="carousel-heading no-margin">
+            <h4>Bill to &amp; SHippment information</h4>
+        </div>
+        <br/>
+        @Html.Raw(@Ajax.ActionLink("lthema1", "Index", "ShoppingCart", null,
+                                   new AjaxOptions
+                                   {
+                                       UpdateTargetId = "mm-content",
+                                       OnSuccess = "loadC"
+
+                                   }, new { @class = "button red AjaxLink", title = "Quay về" })
+                                   .ToHtmlString()
+                                   .Replace("lthema1", "Quay về"))
+        <div class="page-content">
+
+            <div class="row">
+            @using (Ajax.BeginForm("CheckOutCart", "ShoppingCart", null, new AjaxOptions()
+            {
+                UpdateTargetId = "mm-content",
+                HttpMethod = "POST"
+
+
+            }, new { }))
+            {
+                @Html.AntiForgeryToken()
+                <div class="col-lg-6 col-md-6 col-sm-6" style="margin-bottom:5px;">
+                    <p><strong>Bill to</strong></p>
+                    <a class="button grey">Bổ sung thông tin giao hàng</a><br />
+                </div>
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                if (@TempData["Success"] != null && @TempData["Success"].ToString().Equals("0"))
+                {
+                    <script>
+                            thongbao2sop("Thông báo ", "Thao tác thành công");
+                    </script>
+                }
+               if (@ViewData["Error"] != null)
+                {
+                    if (@ViewData["Error"].ToString().Equals("2"))
+                    {
+                        <script>
+                            thongbao2s("Thông báo lỗi", "Thao tác thất bại");
+                           
+                        </script>
+                    }
+                    
+                    else
+                    {
+                        <script>
+                            thongbao2s("Thông báo lỗi", "Không tìm thấy thông tin tài khoản");
+                            console.log(@ViewData["Error"].ToString());
+                        </script>
+                    }
+
+
+
+
+
+                }
+                <div class="col-lg-9 col-md-9 col-sm-9">
+                    <div class="iconic-input">
+
+
+                        @Html.EditorFor(model => model.TenNguoiNhan, new { htmlAttributes = new {  placeholder = "Tên người nhận" } })
+                        <i class="icons icon-user"></i>
+                        @Html.ValidationMessageFor(model => model.TenNguoiNhan, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <br />
+                <div class="col-lg-4 col-md-4 col-sm-4">
+                    <div class="iconic-input">
+
+                        @Html.EditorFor(model => model.SoNha, new { htmlAttributes = new { placeholder = "Số nhà" } })
+                        <i class="icons icon-globe"></i>
+                        @Html.ValidationMessageFor(model => model.SoNha, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-lg-5 col-md-5 col-sm-5">
+                    <div class="iconic-input">
+                        @Html.EditorFor(model => model.Duong, new { htmlAttributes = new { placeholder = "Đường" } })
+                        <i class="icons icon-globe"></i>
+                        @Html.ValidationMessageFor(model => model.Duong, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4">
+                    <div class="iconic-input">
+                        @Html.EditorFor(model => model.Quan, new { htmlAttributes = new { placeholder = "Quận" } })
+                        <i class="icons icon-globe"></i>
+                        @Html.ValidationMessageFor(model => model.Quan, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-lg-5 col-md-5 col-sm-5">
+                    <div class="iconic-input">
+                        @Html.EditorFor(model => model.TP, new { htmlAttributes = new { placeholder = "Tỉnh/TP" } })
+                        <i class="icons icon-globe"></i>
+                        @Html.ValidationMessageFor(model => model.TP, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="col-lg-6 col-md-6 col-sm-6">
+                    <p>
+                        Vui lòng nhập chính xác thông tin trên.
+                    </p>
+
+                    <input type="submit" value="Lưu thông tin & đặt hàng" class="button"/>
+
+
+
+
+                </div>
+            }
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+<script src="~/Scripts/jspage.js"></script>
+<script>
+    
+    var thongbao2sop = function (strtitle, msg) {
+        swal({
+            title: strtitle,
+            text: msg,
+            timer: 2000,
+            showConfirmButton: false
+        },
+        function () {
+
+            location.href = "/FTeam/Index";
+        }
+        );
+    }
+
+</script>
+

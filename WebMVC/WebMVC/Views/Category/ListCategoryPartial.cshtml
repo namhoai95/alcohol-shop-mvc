@@ -1,0 +1,21 @@
+﻿@using WebMVC.Models;
+@model List<Category>
+
+<div class="sidebar-box-content">
+    <ul>
+        @foreach (var item in Model)
+        {
+            <li>
+        
+            @Html.Raw(@Ajax.ActionLink("lthema1", "C", "Category", new { id = item.ID },
+                                   new AjaxOptions
+                                   {
+                                       UpdateTargetId = "mm-content", OnSuccess="loadC"
+                                   }, new { @class = "AjaxLink", title = item.TenLoai })
+                                   .ToHtmlString()
+                                   .Replace("lthema1", @item.TenLoai + "<i class='icons icon-right-dir'></i>"))
+            </li>
+        }
+    </ul>
+</div>
+

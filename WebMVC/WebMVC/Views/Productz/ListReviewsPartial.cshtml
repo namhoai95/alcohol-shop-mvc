@@ -1,0 +1,70 @@
+﻿@using WebMVC.Models
+@model List<ReView>
+
+@*<div class="row">
+
+    <div class="col-lg-6 col-md-6 col-sm-6">
+        <div class="category-results">
+            <p>Results 1-6 of 6</p>
+        </div>
+    </div>
+
+    <div class="col-lg-6 col-md-6 col-sm-6">
+        <div class="pagination">
+            <a href="#"><div class="previous"><i class="icons icon-left-dir"></i></div></a>
+            <a href="#"><div class="page-button">1</div></a>
+            <a href="#"><div class="page-button">2</div></a>
+            <a href="#"><div class="page-button">3</div></a>
+            <a href="#"><div class="next"><i class="icons icon-right-dir"></i></div></a>
+        </div>
+    </div>
+
+</div>*@
+
+<ul class="comments">
+    @foreach (ReView r in Model)
+    {
+        <li>
+            <p><strong>@r.TacGia</strong></p>
+            <span class="date">@r.NgayTao</span>
+            <div class="rating-box">
+                <div class="rating readonly-rating" data-score="@r.Rate"></div>
+            </div>
+            <br>
+            <p>@r.ReViews</p>
+        </li>
+    }
+</ul>
+
+@using (Ajax.BeginForm("AddReview", "Productz", new { id = ViewBag.ID }, new AjaxOptions()
+{
+    UpdateTargetId = "tab2",
+    HttpMethod = "POST",
+    OnSuccess = "loadC"
+
+}))
+{
+    <h3>Thêm đánh giá</h3>
+    <p>Vui lòng viết đánh giá....(nhiều nhất 2000 kí tự)</p>
+    <textarea id="txtReviews" name="txtReviews"></textarea>
+    <p>Chú ý: Vui lòng đánh giá sao của sản phẩm</p>
+    <div class="rating-box" id="ratingbox">
+        Đánh giá:
+        <div class="rating rate" data-score="3"></div>
+        <input id="SendA" type="hidden" value="" name="SendA" />
+    </div>
+    <div class="char-counter">
+        <label>Số kí tự</label>
+        <input data-target="#txtReviews" type="text">
+    </div>
+    <br>
+    <input type="submit" class="dark-blue big" value="Thêm" onclick="func();">
+}
+<script>
+    function func()
+    {
+        var x = document.getElementById("ratingbox").childNodes[1].childNodes[9].value;
+        console.log(x);
+        document.getElementById("SendA").value = x;
+    };
+</script>

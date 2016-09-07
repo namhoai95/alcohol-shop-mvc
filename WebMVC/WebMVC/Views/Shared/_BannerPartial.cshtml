@@ -1,0 +1,40 @@
+﻿@using WebMVC.Models
+
+<style>
+    #a{
+        color: white;
+    }
+    .b{
+        font-family:inherit !important;
+    }
+</style>
+
+<section class="banner">
+
+    <div class="left-side-banner banner-item icon-on-right gray">
+        <h4 class="b">096 4142 565</h4>
+        <p>Thứ 2 - Thứ 7: 8am - 5pm </p>
+        @Html.Raw(@Ajax.ActionLink("contact", "Contact", "FTeam", null,
+            new AjaxOptions { UpdateTargetId = "mm-content" },
+            new { @class = "AjaxLink" }).ToHtmlString().Replace("contact", "<i class='icons icon-phone-outline' id='a'></i>"))
+    </div>
+
+    <div class="middle-banner banner-item icon-on-left light-blue">
+        <h4 class="b">Giao hàng</h4>
+        <p>Miễn phí trên mọi đơn hàng</p>
+        @Html.Raw(@Ajax.ActionLink("index", "Index", "FTeam", null,
+            new AjaxOptions { UpdateTargetId = "mm-content", OnSuccess = "loadC" },
+            new { @class = "AjaxLink" }).ToHtmlString().Replace("index", "<span class='button'>Mua hàng</span>"))
+        <i class="icons icon-truck-1"></i>
+    </div>
+
+    <div class="right-side-banner banner-item orange">
+        <h4 class="b">Giảm giá!</h4>
+        <p>trên nhiều sản phẩm</p>
+        @Html.Raw(@Ajax.ActionLink("index", "Index", "FTeam", null,
+              new AjaxOptions { UpdateTargetId = "mm-content", OnSuccess = "loadC" },
+              new { @class = "AjaxLink" }).ToHtmlString().Replace("index", "<span class='button'>Mua ngay</span>"))
+    </div>
+
+</section>
+<script src="~/Scripts/jspage.js"></script>

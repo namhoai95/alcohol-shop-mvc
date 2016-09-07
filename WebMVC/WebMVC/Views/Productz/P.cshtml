@@ -1,0 +1,245 @@
+﻿@using WebMVC.Models
+@model Product
+@{
+    Layout = Request.IsAjaxRequest() ? null : "~/Views/Shared/_LayoutIndex.cshtml";
+}
+@{
+    ViewBag.Title = "Chi tiết sản phẩm";
+}
+
+<div id="product-single">
+
+    <!-- Product -->
+    <div class="product-single">
+
+        <div class="row">
+
+            <!-- Product Images Carousel -->
+            <div class="col-lg-5 col-md-5 col-sm-5 product-single-image">
+
+                <div id="product-slider">
+                    <ul class="slides">
+                        <li>
+                            <img class="cloud-zoom" src="@Model.url_img" data-large="@Model.url_img" alt="@Model.TenSanPham" />
+                            <a class="fullscreen-button" href="@Model.url_img">
+                                <div class="product-fullscreen">
+                                    <i class="icons icon-resize-full-1"></i>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div id="product-carousel">
+                    <ul class="slides">
+                        <li>
+                            <a class="fancybox" rel="product-images" href="#"></a>
+
+                            <img src="@Model.url_img" data-large="@Model.url_img" alt="@Model.TenSanPham" />
+                        </li>
+                        
+                    </ul>
+                    <div class="product-arrows">
+                        <div class="left-arrow">
+                            <i class="icons icon-left-dir"></i>
+                        </div>
+                        <div class="right-arrow">
+                            <i class="icons icon-right-dir"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /Product Images Carousel -->
+
+
+            <div class="col-lg-7 col-md-7 col-sm-7 product-single-info">
+
+                <h2>@Model.TenSanPham</h2>
+                <div class="rating-box" id="rating-box">
+                    <div class="rating readonly-rating" data-score="@Model.Nrate"></div>
+                    <span>@Model.NReViews Đáng giá</span>
+                </div>
+                <table>
+                    <tr>
+                        <td>Thương hiệu</td>
+                        <td><a href="#">@Model.Manufacturer.TenHangSanXuat</a></td>
+                    </tr>
+                    <tr>
+                        <td>Số lượng</td>
+                        @if (Model.SoLuongTon > 5)
+                        {
+                            <td><span class="green">(còn hàng)</span> @Model.SoLuongTon sản phẩm</td>
+                        }
+                        else if (Model.SoLuongTon >= 1)
+                        {
+                            <td><span class="green">(sắp hết hàng)</span> @Model.SoLuongTon sản phẩm</td>
+                        }
+                        else
+                        {
+                            <td><span class="red">(hết hàng)</span> @Model.SoLuongTon sản phẩm</td>
+                        }
+
+                    </tr>
+                    <tr>
+                        <td>Mã sản phẩm</td>
+                        <td>@Model.ID</td>
+                    </tr>
+                </table>
+
+                <strong>Thông tin khác</strong>
+                <table>
+                    <tr>
+                        <td>Xuất xứ</td>
+                        <td>@Model.XuatXu.ToUpper()</td>
+                        <td>Nồng độ</td>
+                        <td>@Model.NongDo %</td>
+                    </tr>
+                    
+                    <tr>
+                        <td>Năm sản xuất</td>
+                        <td>@Model.NamSanXuat</td>
+                        <td>Dung tích</td>
+                        <td>@Model.DungTich L</td>
+                    </tr>
+                </table>
+
+                <span class="price">
+                    @if (Model.Gia == Model.GiaKhuyenMai)
+                    {
+                        <span> @string.Format("{0:#,#.##}", Model.GiaKhuyenMai) </span>
+
+                    }
+                    else
+                    {
+                        <del> @string.Format("{0:#,#.##}", Model.Gia) </del>
+                        <span> @string.Format("{0:#,#.##}", Model.GiaKhuyenMai) </span>
+                    }
+                    VNĐ
+                </span>
+
+                <table class="product-actions-single">
+                    
+                    <tr>
+                        <td>Số lượng:</td>
+                        <td>
+                            <div class="numeric-input">
+                                <input type="text" value="1">
+                                <span class="arrow-up"><i class="icons icon-up-dir"></i></span>
+                                <span class="arrow-down"><i class="icons icon-down-dir"></i></span>
+                            </div>
+                            
+                                <span class="add-to-cart">
+                                    @Html.Raw(@Ajax.ActionLink("lthemac32", "AddToCart", "ShoppingCart", new { id = Model.ID },
+                        new AjaxOptions
+                        {
+                            HttpMethod = "POST",
+                            OnSuccess = "loadTB"
+                        }, new { @class = "", title = "Thêm giỏ hàng" })
+                                   .ToHtmlString()
+                                   .Replace("lthemac32", "<span class='action-wrapper' style='color:white;'><i class='icons icon-basket-2'></i><span class='action-name'>Thêm giỏ hàng</span></span>"))
+                                </span>
+                            
+                        </td>
+                    </tr>
+                </table>
+
+                
+
+                <div class="social-share">
+                    <iframe src='https://www.facebook.com/plugins/like.php?href= @Request.Url &width=165&layout=button_count&action=like&show_faces=true&share=true&height=46&appId=641859092618276' width="165" height="46" style="border:none;overflow:hidden;float: left;margin-right: 10px;" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
+                    <div class="g-plusone" data-size="medium" data-annotation="inline" data-width="100"></div>
+
+                    <!-- Place this tag after the last +1 button tag. -->
+                    <script type="text/javascript">
+                                (function() {
+                                var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+                                po.src = 'https://apis.google.com/js/platform.js';
+                                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+                                })();
+                    </script>
+
+
+                    <a data-pin-do="buttonPin" data-pin-count="beside" href="https://www.pinterest.com/pin/create/button/?url=https%3A%2F%2Fwww.pinterest.com%2Fbutadien521993%2Fentbrew%2F6851755809%2F&media=https%3A%2F%2Ffarm8.staticflickr.com%2F7027%2F6851755809_df5b2051c9_z.jpg&description=Next%20stop%3A%20Pinterest"><img src="//assets.pinterest.com/images/pidgets/pinit_fg_en_rect_gray_20.png" /></a>
+                    <script type="text/javascript" async src="//assets.pinterest.com/js/pinit.js"></script>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+    <!-- /Product -->
+    <!-- Product Tabs -->
+    <div class="row">
+
+        <div class="col-lg-12 col-md-12 col-sm-12">
+
+            <div class="tabs">
+
+                <div class="tab-heading">
+                    <a href="#tab1" class="button big">Mô tả</a>
+                    <a href="#tab2" class="button big">Đánh giá</a>
+                    <a href="#tab3" class="button big">Bình luận</a>
+                </div>
+
+                <div class="page-content tab-content">
+
+                    <div id="tab1">
+                        <p>@Model.MoTa</p>
+                        
+                        <p class="tags home-green">
+                            <strong>Tags:</strong> 
+                            @foreach (var it in Model.Tag.Split(';'))
+                            {
+                                <a href="#" class="tag-item">@it.ToString()</a>
+                            }
+                        </p>
+                    </div>
+
+                    <div id="tab2">
+                        @{
+                            Html.RenderAction("ListReviewsPartial", "Productz", new { id = Model.ID });
+                        }
+                    </div>
+
+                    <div id="tab3">
+                        <div class="fb-comments" data-href="@Request.Url" data-numposts="5"></div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+    <!-- /Product Tabs -->
+
+</div>
+
+
+@Html.Action("RelatedProductPartialView", "Productz",new { id = Model.LoaiSP })
+
+<!-- Product Buttons -->
+
+<div class="row button-row">
+
+    <div class="col-lg-5 col-md-5 col-sm-5">
+        @Html.Raw(@Ajax.ActionLink("index", "Index", "FTeam", null,
+            new AjaxOptions { UpdateTargetId = "mm-content", OnSuccess = "loadC" },
+            new { @class = "AjaxLink button grey regular" }).ToHtmlString().Replace("index", "<i class='icons icon-reply'></i> Trở về trang chủ"))
+    </div>
+
+    <div class="col-lg-7 col-md-7 col-sm-7 align-right">
+        @Html.Raw(@Ajax.ActionLink("index", "previousProduct", "Productz", new { id = Model.ID },
+            new AjaxOptions { UpdateTargetId = "mm-content", OnSuccess = "loadC" },
+            new { @class = "AjaxLink button grey regular" }).ToHtmlString().Replace("index", "<i class='icons icon-left-dir'></i> Sản phẩm trước"))
+        @Html.Raw(@Ajax.ActionLink("index", "nextProduct", "Productz", new { id = Model.ID },
+            new AjaxOptions { UpdateTargetId = "mm-content", OnSuccess = "loadC" },
+            new { @class = "AjaxLink button grey regular right-icon" }).ToHtmlString().Replace("index", "<i class='icons icon-right-dir'></i> Sản phẩm tiếp theo"))
+    </div>
+
+</div>
+
+
+

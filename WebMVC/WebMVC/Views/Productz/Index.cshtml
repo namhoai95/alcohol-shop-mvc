@@ -1,0 +1,189 @@
+﻿@model IEnumerable<WebMVC.Models.Product>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.MaSanPham)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TenSanPham)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Gia)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.XuatXu)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.NongDo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DungTich)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.SoLuotXem)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Tag)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MoTa)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.SoLuongTon)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.GhiChu)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ChiTietBoSung)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.GiaKhuyenMai)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.NamSanXuat)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.NgayTao)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TuKhoa)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.SoLuotMua)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.url_img)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Seri)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.NgayCapNhat)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TypeView)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Nrate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.NReViews)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Category.MaLoai)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Manufacturer.Ma)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Producer.MaNSX)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TrangThai.TenTrangThai)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.MaSanPham)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TenSanPham)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Gia)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.XuatXu)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.NongDo)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DungTich)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.SoLuotXem)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Tag)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MoTa)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.SoLuongTon)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.GhiChu)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ChiTietBoSung)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.GiaKhuyenMai)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.NamSanXuat)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.NgayTao)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TuKhoa)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.SoLuotMua)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.url_img)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Seri)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.NgayCapNhat)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TypeView)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Nrate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.NReViews)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Category.MaLoai)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Manufacturer.Ma)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Producer.MaNSX)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TrangThai.TenTrangThai)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |
+            @Html.ActionLink("Details", "Details", new { id=item.ID }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.ID })
+        </td>
+    </tr>
+}
+
+</table>

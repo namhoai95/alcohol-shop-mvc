@@ -1,0 +1,33 @@
+﻿
+<!-- Main Header -->
+<div id="main-header">
+
+    <div class="row">
+
+        <div id="logo" class="col-lg-4 col-md-4 col-sm-4">
+            @Html.Raw(@Ajax.ActionLink("index", "Index", "FTeam", null,
+                new AjaxOptions { UpdateTargetId = "mm-content", OnSuccess = "loadC" },
+                new { @class = "AjaxLink" }).ToHtmlString().Replace("index", "<img src='/img/logo.png' alt='Logo'>"))
+        </div>
+
+        <nav id="middle-navigation" class="col-lg-8 col-md-8 col-sm-8">
+            <ul class="pull-right">
+                <li class="blue" id="li-compare">
+                    @Html.Action("CompareInHeader", "Cartz")
+                </li>
+                <li class="red" id="li-wl">
+                    @Html.Action("WishlistInHeader", "Wishlist")
+                </li>
+
+
+                <li class="orange" id="li-cart">
+                    @Html.Action("CartInHeader", "Fteam")
+                </li>
+
+            </ul>
+        </nav>
+
+    </div>
+
+</div>
+<!-- /Main Header -->

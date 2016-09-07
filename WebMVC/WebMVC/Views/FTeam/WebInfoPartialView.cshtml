@@ -1,0 +1,37 @@
+﻿@using WebMVC.Models
+@model Website
+
+
+    <div class="carousel-heading no-margin">
+        <h4>Thông tin liên hệ</h4>
+    </div>
+
+    <div class="page-content contact-info">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3919.01299823217!2d106.62338331480107!3d10.810315992298495!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31752be17071b245%3A0x3fcf9f3c1e4ca146!2zMzdLIE5ndXnhu4VuIEjhu691IFRp4bq_biwgcGjGsOG7nW5nIDE1LCBUw6JuIFBow7osIEjhu5MgQ2jDrSBNaW5oLCBWaeG7h3QgTmFt!5e0!3m2!1svi!2s!4v1462959407233" width="425" height="350" frameborder="0" style="border:0" allowfullscreen></iframe>
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6">
+                <div class="contact-item green">
+                    <i class="icons icon-location-3"></i>
+                    <p>@Model.diachi</p>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6">
+                <div class="contact-item blue">
+                    <i class="icons icon-mail"></i>
+                    <p>@Model.email</p>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6">
+                <div class="contact-item orange">
+                    <i class="icons icon-phone"></i>
+                    <p>@Model.sdt1<br />@Model.sdt2</p>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6">
+                <div class="contact-item purple">
+                    <i class="icons icon-clock"></i>
+                    <p>Thứ 2 - Thứ 6<br></p>
+                </div>
+            </div>
+        </div>
+    </div>

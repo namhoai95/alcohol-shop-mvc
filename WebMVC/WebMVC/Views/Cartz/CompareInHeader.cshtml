@@ -1,0 +1,7 @@
+﻿@using WebMVC.ViewModels
+@model WebMVC.ViewModels.CompareView
+
+@Html.Raw(@Ajax.ActionLink("new", "Index", "Cartz", null,
+        new AjaxOptions { UpdateTargetId = "mm-content", OnSuccess = "loadC" },
+        new { @class = "AjaxLink", @title = @Model.listItem.Count + " sản phẩm" }).ToHtmlString().Replace("new", "<i class='icons icon-docs'></i>" + @Model.listItem.Count + "sp"))
+

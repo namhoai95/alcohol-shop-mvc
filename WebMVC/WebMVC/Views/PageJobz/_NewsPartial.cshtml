@@ -1,0 +1,42 @@
+﻿@using WebMVC.Models
+@model List<Job>
+
+@foreach (Job item in Model)
+{
+    <div>
+        <!-- Carousel Item -->
+        <article class="news">
+
+            <div class="news-background">
+
+                <div class="row">
+                    <div class="col-lg-6 col-md-6 col-sm-6 news-thumbnail">
+                        @Html.Raw(@Ajax.ActionLink("job", "Details", "PageJobz", new { id = item.id },
+                                new AjaxOptions { UpdateTargetId = "mm-content", OnSuccess="loadC" },
+                                new { @class = "AjaxLink" }).ToHtmlString().Replace("job", "<img src='"+ @item.img + "' style = 'height: 180px; width: 230px;' alt ='News1'>"))
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-6 news-content">
+                        <h5>
+                        @Html.Raw(@Ajax.ActionLink("job", "Details", "PageJobz", new { id = item.id },
+                                new AjaxOptions { UpdateTargetId = "mm-content", OnSuccess = "loadC" },
+                                new { @class = "AjaxLink" }).ToHtmlString().Replace("job", @item.title))
+                        </h5>
+                        <span class="date"><i class="icons icon-clock-1"></i>@string.Format("{0}-{1}-{2}", Convert.ToDateTime(item.day).Day, Convert.ToDateTime(item.day).Month, Convert.ToDateTime(item.day).Year)</span>
+
+
+                        @Html.Raw(item.contents.Length > 150? item.contents.Substring(0, 150) + "....." : item.contents + ".....")
+
+
+                        @Html.Raw(@Ajax.ActionLink("job", "Details", "PageJobz", new { id = item.id },
+                                new AjaxOptions { UpdateTargetId = "mm-content", OnSuccess = "loadC" },
+                                new { @class = "AjaxLink" }).ToHtmlString().Replace("job", "Xem thêm"))
+                    </div>
+                </div>
+
+            </div>
+
+        </article>
+        <!-- /Carousel Item -->
+    </div>
+}
+

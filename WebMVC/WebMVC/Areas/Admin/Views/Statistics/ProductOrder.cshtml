@@ -1,0 +1,205 @@
+﻿@model IEnumerable<WebMVC.Models.Order>
+@{
+    Layout = Request.IsAjaxRequest() ? null : "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+<script>
+    $(document).ready(function () {
+        var d = new Date();
+        var selectYear = document.getElementById("year");
+        for (var i = 2010; i <= d.getFullYear() ; i++) {
+            option = document.createElement('option');
+            option.value = option.text = i;
+            selectYear.add(option);
+        }
+        var selectMonth = document.getElementById("month");
+        for (var i = 0; i < 12; i++) {
+            option = document.createElement('option');
+            option.value = option.text = i + 1;
+            selectMonth.add(option);
+        }
+        $("#txtName").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/Admin/Products/autoCompleteSeach",
+                    type: "POST",
+                    dataType: "json",
+                    data: { Prefix: request.term },
+                    success: function(data) {
+                        response($.map(data,
+                            function(item) {
+                                return { label: item.TenSanPham, value: item.TenSanPham };
+                            }));
+                    }
+                });
+            },
+            messages: {
+                noResults: "", results: ""
+            }
+        });
+      
+        $('#search').click(function () {
+            var text = $('#txtName').val();
+            var year = $('#year').val();
+            var m = $('#month').val();
+            var row = [];
+            var sum = 0;
+            var sumMoney = 0;
+            var sumOrder = 0;
+            var sumProduct = 0;
+            var month = [];
+            var orders = [];
+            var products = [];
+            var maHD = [];
+            var tenSanPham = [];
+            var tongTien = [];
+            var soLuong = [];
+            var thangMua = [];
+            var nam = 0;
+            if (m === 'thang' && year !== 'nam') {
+                $.ajax({
+                    url: '/Admin/Statistics/ProductOrdersYear',
+                    type: 'POST',
+                    dataType: "json",
+                    data: { Prefix: text, Year: year},
+                    success: function (data) {                        
+                        $.each(data, function (index, item) {
+                            sumMoney = item.SumMoney;
+                            sumOrder = item.SumOrder;
+                            sumProduct = item.SumProduct;
+                            month.push(item.Month);
+                            orders.push(sumOrder);
+                            products.push(sumProduct);
+                            for (var i = 0; i < item.MaHD.length; i++) {
+                                maHD.push(item.MaHD[i]);
+                                soLuong.push(item.SoLuong[i]);
+                                tenSanPham.push(item.TenSanPham[i]);
+                                tongTien.push(item.TongTien[i]);
+                                thangMua.push(item.MonthBuy[i]);
+                            }
+                            nam = item.Year;
+                        });
+                        for (var i = 0; i < maHD.length; i++) {
+                            sum += tongTien[i];
+                            row.push("<tr><td>" + maHD[i] + "</td><td>" + tenSanPham[i] + "</td><td>" + tongTien[i] + "</td><td>" + soLuong[i] + "</td><td>" + thangMua[i] + "</td><td>" + nam + "</td></tr>");
+                        }
+                        $("#orders").html(row);
+                        drawChart(month, orders, products);
+                        sum = "Tổng tiền: " + sum;
+                        $("#sumMoney").html(sum);
+                    }
+                });
+            }    
+            else if (m !== 'thang' && year !== 'nam') {
+                $.ajax({
+                    url: '/Admin/Statistics/ProductOrders',
+                    type: 'POST',
+                    dataType: "json",
+                    data: { Prefix: text, Year: year, Month: m },
+                    success: function (data) {                  
+                        $.each(data, function (index, item) {
+                            sumMoney = item.SumMoney;
+                            sumOrder = item.SumOrder;
+                            sumProduct = item.SumProduct;
+                            month.push(item.Month);
+                            orders.push(sumOrder);
+                            products.push(sumProduct);
+                            for (var i = 0; i < item.MaHD.length; i++) {
+                                maHD.push(item.MaHD[i]);
+                                soLuong.push(item.SoLuong[i]);
+                                tenSanPham.push(item.TenSanPham[i]);
+                                tongTien.push(item.TongTien[i]);
+                                thangMua.push(item.MonthBuy[i]);
+                            }
+                            nam = item.Year;
+                        });
+                        for (var i = 0; i < maHD.length; i++) {
+                            sum += tongTien[i];
+                            row.push("<tr><td>" + maHD[i] + "</td><td>" + tenSanPham[i] + "</td><td>" + tongTien[i] + "</td><td>" + soLuong[i] + "</td><td>" + thangMua[i] + "</td><td>" + nam + "</td></tr>");
+                        }
+                        $("#orders").html(row);
+                        drawChart(month, orders, products);
+                        sum = "Tổng tiền: " + sum;
+                        $("#sumMoney").html(sum);
+                    }
+                });
+            }        
+        });
+        function drawChart(month, orders, products) {
+            var data = new google.visualization.DataTable();
+            data.addColumn('number', 'Tháng');
+            data.addColumn('number', 'Tổng Đơn Hàng');
+            data.addColumn('number', 'Tổng Sản Phẩm');
+            for (var i = 0; i < month.length; i++) {
+                data.addRows([[month[i], orders[i], products[i]]]);
+            }
+
+            var options = {
+                chart: {
+                    title: 'Thống Kê Đơn Hàng',
+                    subtitle: 'Tháng, Tổng Đơn Hàng, Tổng Sản Phẩm',
+                }
+            };
+
+            var chart = new google.charts.Bar(document.getElementById('columnchart_material'));
+
+            chart.draw(data, options);
+        }
+    })
+</script>
+<div class="page-content">
+    <div class="table-container">
+        <div class="row mbl">
+            <div class="col-lg-12">
+                <div class="input-group input-group-sm mbs">
+                    <div class="col-lg-12">
+                        <div class="col-lg-4">
+                            <input id="txtName" class="form-control" type="text" placeholder="Nhập tên sản phẩm" name="txtName" />
+                        </div>
+                        <div class="col-lg-2">
+                            <div class="form-group">
+                                <select id="month" class="form-control" name="month">
+                                    <option value="thang">Tháng</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-2">
+                            <div class="form-group">
+                                <select id="year" class="form-control" name="year">
+                                    <option value="nam">Năm</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <span class="input-group-btn">
+                                <input class="btn btn-success dropdown-toggle" id="search" type="submit" name="search" value="Tìm kiếm" />
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="columnchart_material" style="width: 500px; height: 500px;margin: auto"></div>
+        <div class="panel panel-blue">
+            <div class="panel-heading col-lg-12">
+                <div class="caption col-lg-6">Danh sách đơn hàng</div>
+            </div>
+            <div class="panel-body">
+                <table class="table table-hover table-striped table-bordered table-advanced tablesorter">
+                    <tr>
+                        <th class="talbe-head" width="5%">Mã Hóa Đơn</th>
+                        <th class="talbe-head">Tên Sản Phẩm</th>
+                        <th class="talbe-head" width="5%">Tổng Tiền</th>
+                        <th class="talbe-head" width="5%">Số lượng</th>
+                        <th class="talbe-head" width="5%">Tháng</th>
+                        <th class="talbe-head" width="5%">Năm</th>
+                    </tr>
+                    <tbody id="orders"></tbody>
+                </table>
+                <span style="float: right" class="label label-success" id="sumMoney" />
+            </div>
+        </div>
+    </div>
+</div>

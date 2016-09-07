@@ -1,0 +1,42 @@
+﻿@using WebMVC.Models
+@model List<Product>
+<div class="sidebar-box-content">
+    <table class="bestsellers-table">
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td class="product-thumbnail">
+                    
+                    @Html.Raw(@Ajax.ActionLink("lthema1", "P", "Productz", new { id = item.ID },
+                                   new AjaxOptions
+                                   {
+                                       UpdateTargetId = "mm-content",
+                                       OnSuccess = "loadC"
+                                   }, new { @class = "AjaxLink", title = item.TenSanPham })
+                                   .ToHtmlString()
+                                   .Replace("lthema1","<img src ='"+@item.url_img+"'>"))
+                </td>
+                <td class="product-info">
+                    <p>
+                        @Html.Raw(@Ajax.ActionLink("lthema1", "P", "Productz", new { id = item.ID },
+                                   new AjaxOptions
+                                   {
+                                       UpdateTargetId = "mm-content",
+                                       OnSuccess = "loadC"
+                                   }, new { @class = "AjaxLink", title = item.TenSanPham })
+                                   .ToHtmlString()
+                                   .Replace("lthema1", @item.TenSanPham))
+                    </p>
+                    <span class="price"> 
+                        @string.Format("{0:#,#.##}", item.GiaKhuyenMai) VNĐ
+                    
+                    </span>
+                </td>
+            </tr>
+        }
+        
+
+    </table>
+</div>
+

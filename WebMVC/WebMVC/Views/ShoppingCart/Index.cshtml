@@ -1,0 +1,223 @@
+﻿@model WebMVC.ViewModels.ShoppingCartViewModel
+@{
+    ViewBag.Title = "Shopping Cart";
+}
+@{
+    
+    Layout = Request.IsAjaxRequest() ? null : "~/Views/Shared/_LayoutIndex.cshtml";
+}
+<script src="~/Scripts/jquery-1.11.0.min.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $(".RemoveLink").click(function () {
+            var recordToDelete = $(this).attr("data-id");
+            console.log(recordToDelete)
+            if (recordToDelete != '') {
+                $.post("/ShoppingCart/RemoveFromCart", { "id": recordToDelete },
+                    function (data) {
+                        if (data.ItemCount == 0) {
+                            $('#row-' + data.DeleteId).fadeOut('slow');
+                        } else {
+                            $('#item-count-' + data.DeleteId).text(data.ItemCount);
+                        }
+                        $('#cart-total').text(data.CartTotal);
+                        $('#update-message').text(data.Message);
+                        $('#cart-status').text('Cart (' + data.CartCount + ')');
+                        if (data.CartTotal == 0) {
+                            location.href = "/FTeam";
+                        }
+                    });
+                $.ajax({
+                    url: "/FTeam/UpdateToCart",
+                    type: "GET",
+                    success: function (result) {
+                        $('#li-cart').html(result);
+                    }
+                });
+            }
+        });
+        
+        $(".UpdateCount").click(function () {
+            var recordToDelete = $(this).attr("data-id");
+            //var idrecord = "'#item-count-" + recordToDelete + "'";
+            //console.log(idrecord)
+            //var v = $("'#item-count-" + recordToDelete + "'").val();
+            var v = document.getElementById("item-count-" + recordToDelete).value
+            console.log(v)
+            if (recordToDelete != '') {
+                $.post("/ShoppingCart/UpdateCart", { "id": recordToDelete ,"sl" : v},
+                    function (data) {
+                        
+                        $('#mm-content').html(data);
+                        
+                    });
+                $.ajax({
+                    url: "/FTeam/UpdateToCart",
+                    type: "GET",
+                    success: function (result) {
+                        $('#li-cart').html(result);
+                    }
+                });
+            }
+        });
+
+        $(".ckout").click(function () {
+            //var recordToDelete = $(this).attr("data-id");
+            //console.log(recordToDelete)
+            //if (recordToDelete != '') {
+            //    $.post("/ShoppingCart/RemoveFromCart", { "id": recordToDelete },
+            //        function (data) {
+            //            if (data.ItemCount == 0) {
+            //                $('#row-' + data.DeleteId).fadeOut('slow');
+            //            } else {
+            //                $('#item-count-' + data.DeleteId).text(data.ItemCount);
+            //            }
+            //            $('#cart-total').text(data.CartTotal);
+            //            $('#update-message').text(data.Message);
+            //            $('#cart-status').text('Cart (' + data.CartCount + ')');
+            //        });
+            //}
+        });
+
+    });
+</script>
+@*<div class="row">
+
+    <div class="col-lg-12 col-md-12 col-sm-12">
+
+        <div class="carousel-heading no-margin">
+            <h4>I am already registered</h4>
+        </div>
+
+        <div class="page-content">
+            <p>If you are already registered please login directly here</p>
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6">
+                    <div class="iconic-input">
+                        <input type="text" placeholder="Username">
+                        <i class="icons icon-user-3"></i>
+                    </div>
+                </div>
+
+                <div class="col-lg-6 col-md-6 col-sm-6">
+                    <div class="iconic-input">
+                        <input type="text" placeholder="Password">
+                        <i class="icons icon-lock"></i>
+                    </div>
+                </div>
+            </div>
+
+            <input type="checkbox" id="loginremember2"> <label for="loginremember2">Remember me</label>
+            <br /><br />
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6 align-left">
+                    <input type="submit" class="orange" value="Login">
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-6 align-right">
+                    <small>
+                        <a href="#">Forgot your password?</a>
+                        <br>
+                        <a href="#">Forgot your username?</a>
+                    </small>
+                </div>
+            </div>
+        </div>
+
+        <div class="page-content-footer">
+            <h4 class="pull-left">NEW CUSTOMER?</h4>
+            <a class="button pull-right" href="create_an_account.html">Create an account</a>
+        </div>
+    </div>
+
+</div>*@
+
+
+
+
+
+
+<div class="row">
+
+
+    <div class="col-lg-12 col-md-12 col-sm-12">
+
+        <div class="carousel-heading">
+            <h4>Shopping Cart</h4>
+        </div>
+        <div id="update-message">
+        </div>
+
+        <table class="shopping-table">
+
+            <tr>
+                <th colspan="2">Product Image and Name</th>
+                <th>SKU</th>
+                <th>Price</th>
+                <th>Quanitity</th>
+
+                <th>Total</th>
+            </tr>
+
+            @foreach (var item in Model.CartItems)
+            {
+                <tr id="row-@item.ProductId">
+                    <td class="image-column"><a href="#"><img src="@item.Product.url_img" alt=""></a></td>
+                    <td><p><a href="#">@item.Product.TenSanPham</a></p></td>
+                    <td><p>@item.Product.MaSanPham</p></td>
+                    <td><p>@string.Format("{0:#,#.##}", item.Product.Gia)</p></td>
+                    <td class="quantity" >
+                        <input type="text" value="@item.Count" id="item-count-@item.ProductId" onkeypress='return event.charCode >= 48 && event.charCode <= 57'>
+                        <p>
+                            <a href="#" class="UpdateCount" data-id="@item.ProductId">
+                            <i class="icons icon-ok-3"></i> Cập nhật
+                            
+                            
+                            </a><br>
+                            <a href="#" class="red-hover RemoveLink" data-id="@item.ProductId"><i class="icons icon-cancel-3"></i> Xoá</a>
+                        </p>
+                    </td>
+
+                    <td><p>@string.Format("{0:#,#.##}", item.Count * item.Product.Gia)</p></td>
+                </tr>
+            }
+
+
+
+            <tr>
+                <td class="align-right" colspan="5">Product prices result</td>
+               
+                <td id="cart-total"><span class="price">@string.Format("{0:#,#.##}",Model.CartTotal) VNĐ</span></td>
+            </tr>
+
+        </table>
+        <br><br>
+        @if (Model.CartTotal != 0)
+        {
+            @*<input type="submit" class="red huge ckout" value="Đặt hàng"/>*@
+            @Html.Raw(@Ajax.ActionLink("lthema1", "CheckOutCart", "ShoppingCart", null,
+                                   new AjaxOptions
+                                   {
+                                       UpdateTargetId = "mm-content",
+                                       OnSuccess = "loadC"
+
+                                   }, new { @class = "button red huge AjaxLink", title = "Đặt hàng" })
+                                   .ToHtmlString()
+                                   .Replace("lthema1", "Đặt hàng"))
+        }
+        
+    </div>
+
+</div>
+
+<script src="~/Scripts/jspage.js"></script>
+
+
+
+
+
+
+
+
+
+
+

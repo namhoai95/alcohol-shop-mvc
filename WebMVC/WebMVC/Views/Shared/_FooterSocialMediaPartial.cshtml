@@ -1,0 +1,27 @@
+﻿@using WebMVC.Models
+
+@{ 
+    string url = Request.Url.ToString();
+    string gg = "https://plus.google.com/share?url=" + url;
+    string fb = "https://facebook.com/sharer.php?u=" + url;
+    string pin = "http://pinterest.com/pin/create/link/?url=" + url;
+    string tw = "https://twitter.com/intent/tweet?url=<?=urlencode(" + url + ")?>";
+}
+
+<div class="col-lg-5 col-md-5 col-sm-5 social-media">
+    <h4>Mạng xã hội</h4>
+    <ul>
+        <li class="social-googleplus tooltip-hover" data-toggle="tooltip" data-placement="top" title="Google+">
+            <a href=@gg></a>
+        </li>
+        <li class="social-facebook tooltip-hover" data-toggle="tooltip" data-placement="top" title="Facebook">
+            <a href=@fb></a>
+        </li>
+        <li class="social-pinterest tooltip-hover" data-toggle="tooltip" data-placement="top" title="Pinterest">
+            <a href=@pin></a>
+        </li>
+        <li class="social-twitter tooltip-hover" data-toggle="tooltip" data-placement="top" title="Twitter">
+            <a href=@tw></a>
+        </li>
+    </ul>
+</div>

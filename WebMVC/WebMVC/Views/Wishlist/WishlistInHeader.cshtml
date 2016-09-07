@@ -1,0 +1,15 @@
+﻿@using WebMVC.ViewModels
+@model WebMVC.ViewModels.WishlistView
+
+<a href="#" title="@Model.WTotal sản phẩm">
+    @if (Model.WTotal <= 0)
+    {
+        <i class="icons icon-heart-empty"></i>
+    }
+    else
+    {
+        <i class="icons icon-heart"></i>
+    }
+    @Model.WTotal sp
+    
+</a>

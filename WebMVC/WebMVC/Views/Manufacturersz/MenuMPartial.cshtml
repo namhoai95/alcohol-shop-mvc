@@ -1,0 +1,39 @@
+﻿@using WebMVC.Models
+@model List<Manufacturer>
+<ul class="wide-dropdown normalAniamtion">
+    @{ int i = 0;}
+    @{ int k = 4;}
+    @{ int s = Model.Count();}
+    @{ int nsub = s / k;}
+    @if(nsub *k < s) { nsub++; }
+    @for (int j = 0; j < nsub; j++)
+    {
+        <li>
+            <ul>
+                @{ int f = 0;}
+                @foreach (var item in Model)
+                {
+                    if(f <= i && i > k) { f++;continue; }
+                    if(i>= (j+1)*k) { break; }
+                    <li>
+                       
+                        @Html.Raw(@Ajax.ActionLink("lthema1", "M", "Manufacturersz", new { id = item.ID },
+                                   new AjaxOptions
+                                   {
+                                       UpdateTargetId = "mm-content",
+                                       OnSuccess = "loadC"
+                                   }, new { @class = "AjaxLink", title = item.TenHangSanXuat })
+                                   .ToHtmlString()
+                                   .Replace("lthema1", @item.TenHangSanXuat + "<i class='icons icon-right-dir'></i>"))
+                    </li>
+                    i++;
+                }
+                
+            </ul>
+        </li>
+    }
+    
+    
+    
+</ul>
+<script src="~/Scripts/jspage.js"></script>

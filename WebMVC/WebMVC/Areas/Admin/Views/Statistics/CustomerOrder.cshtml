@@ -1,0 +1,158 @@
+﻿@model IEnumerable<WebMVC.Models.Order>
+@{
+    Layout = Request.IsAjaxRequest() ? null : "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+<link href="~/Scripts/vendors/jplist/html/css/vendor/jquery-ui.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-3.0.0.js"></script>
+<script src="~/Scripts/jquery-ui.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var d = new Date();
+        var select = document.getElementById("year");
+        for (var i = 2010; i <= d.getFullYear() ; i++) {
+            option = document.createElement('option');
+            option.value = option.text = i;
+            select.add(option);
+        }
+        $("#txtName").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/Admin/Statistics/Customers",
+                    type: "POST",
+                    dataType: "json",
+                    data: { Prefix: request.term },
+                    success: function (data) {
+                        response($.map(data,
+                            function (item) {                              
+                                return { label: item, value: item };
+                            }));
+                    }
+                });
+            }
+        });
+        $('#search').click(function () {
+            var text = $('#txtName').val();
+            var year = $('#year').val();
+            if (year === 'nam') {
+                alert("Vui lòng chọn năm");
+            } else {
+                $.ajax({
+                    url: '/Admin/Statistics/CustomerOrders',
+                    type: 'POST',
+                    dataType: "json",
+                    data: { Prefix: text, Year: year },
+                    success: function (data) {
+                        var row = [];
+                        var sum = 0;
+                        var sumMoney = 0;
+                        var sumOrder = 0;
+                        var sumProduct = 0;
+                        var month = [];
+                        var orders = [];
+                        var products = [];
+                        var maHD = [];
+                        var tenKH = [];
+                        var tenSanPham = [];
+                        var tongTien = [];
+                        var soLuong = [];
+                        var thangMua = [];
+                        $.each(data, function (index, item) {
+                            sumMoney = item.SumMoney;
+                            sumOrder = item.SumOrder;
+                            sumProduct = item.SumProduct;
+                            month.push(item.Month);
+                            orders.push(sumOrder);
+                            products.push(sumProduct);
+                            for (var i = 0; i < item.MaHD.length; i++) {
+                                maHD.push(item.MaHD[i]);
+                                soLuong.push(item.SoLuong[i]);
+                                tenKH.push(item.TenKH[i]);
+                                tenSanPham.push(item.TenSanPham[i]);
+                                tongTien.push(item.TongTien[i]);
+                                thangMua.push(item.MonthBuy[i]);
+                            }
+                        });
+                        for (var i = 0; i < maHD.length; i++) {
+                            sum += tongTien[i];
+                            row.push("<tr><td>" + maHD[i] + "</td><td>" + tenKH[i] + "</td><td>" + tenSanPham[i] + "</td><td>" + tongTien[i] + "</td><td>" + soLuong[i] + "</td><td>" + thangMua[i] + "</td></tr>");
+                        }
+                        $("#orders").html(row);
+                        drawChart(month, orders, products);
+                        sum = "Tổng tiền: " + sum;
+                        $("#sumMoney").html(sum);
+                    }
+                });
+            }         
+        });
+        function drawChart(month, orders, products) {
+            var data = new google.visualization.DataTable();
+            data.addColumn('number', 'Tháng');
+            data.addColumn('number', 'Tổng Đơn Hàng');
+            data.addColumn('number', 'Tổng Sản Phẩm');
+            for (var i = 0; i < month.length; i++) {
+                data.addRows([[month[i], orders[i], products[i]]]);
+            }
+
+            var options = {
+                chart: {
+                    title: 'Thống Kê Đơn Hàng',
+                    subtitle: 'Tháng, Tổng Đơn Hàng, Tổng Sản Phẩm',
+                }
+            };
+
+            var chart = new google.charts.Bar(document.getElementById('columnchart_material'));
+
+            chart.draw(data, options);
+        }
+    });
+</script>
+<div class="page-content">
+    <div class="table-container">
+        <div class="row mbl">
+            <div class="col-lg-6">
+                <div class="input-group input-group-sm mbs">
+
+                    <div class="col-lg-12">
+                        <div class="col-lg-6">
+                            <input id="txtName" class="form-control" type="text" placeholder="Nhập tên khách hàng tại đây..." name="txtName"/>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                                <select id="year" class="form-control" name="year">
+                                    <option value="nam">Năm</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <span class="input-group-btn">
+                                <input class="btn btn-success dropdown-toggle" id="search" type="submit" name="search" value="Tìm kiếm" />
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="columnchart_material" style="width: 500px; height: 500px;margin: auto"></div>
+        <div class="panel panel-blue">
+            <div class="panel-heading col-lg-12">
+                <div class="caption col-lg-6">Danh sách đơn hàng</div>
+            </div>
+            <div class="panel-body">
+                <table class="table table-hover table-striped table-bordered table-advanced tablesorter">
+                    <tr>
+                        <th class="talbe-head" width="5%">Mã Hóa Đơn</th>
+                        <th class="talbe-head">Tên Khách Hàng</th>
+                        <th class="talbe-head" width="10%">Tên Sản Phẩm</th>
+                        <th class="talbe-head" width="5%">Tổng Tiền</th>
+                        <th class="talbe-head" width="5%">Số lượng</th>
+                        <th class="talbe-head" width="5%">Tháng</th>
+                    </tr>
+                    <tbody id="orders">
+
+                    </tbody>
+                </table>
+                <span style="float: right" class="label label-success" id="sumMoney" />
+            </div>
+        </div>
+    </div>
+</div>

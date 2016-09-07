@@ -1,0 +1,240 @@
+﻿@model WebMVC.Models.Product
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Product</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.MaSanPham)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MaSanPham)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TenSanPham)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TenSanPham)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Gia)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Gia)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.XuatXu)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.XuatXu)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NongDo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NongDo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DungTich)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DungTich)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.SoLuotXem)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SoLuotXem)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Tag)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Tag)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MoTa)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MoTa)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.SoLuongTon)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SoLuongTon)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.GhiChu)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.GhiChu)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ChiTietBoSung)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ChiTietBoSung)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.GiaKhuyenMai)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.GiaKhuyenMai)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NamSanXuat)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NamSanXuat)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NgayTao)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NgayTao)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TuKhoa)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TuKhoa)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.SoLuotMua)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SoLuotMua)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.url_img)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.url_img)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Seri)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Seri)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NgayCapNhat)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NgayCapNhat)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TypeView)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TypeView)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Nrate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Nrate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NReViews)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NReViews)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Category.MaLoai)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Category.MaLoai)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Manufacturer.Ma)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Manufacturer.Ma)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Producer.MaNSX)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Producer.MaNSX)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TrangThai.TenTrangThai)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TrangThai.TenTrangThai)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

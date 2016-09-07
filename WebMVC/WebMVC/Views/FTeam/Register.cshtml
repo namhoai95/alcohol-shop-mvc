@@ -1,0 +1,233 @@
+﻿@using WebMVC.ViewModels
+@model WebMVC.ViewModels.RegisterViewModel
+@{
+    Layout = Request.IsAjaxRequest() ? null : "~/Views/Shared/_LayoutIndex.cshtml";
+}
+@{
+    ViewBag.Title = "Đăng ký";
+}
+
+
+<style>
+    .em input[type="email"],.em input[type="password"] {
+    width: 100%;
+    background: #f7f7f7;
+    font-size: 14px;
+   
+    }
+    input[type="email"], input[type="password"], select {
+        padding: 5px 10px;
+        border: 1px solid #e6e6e6;
+        height: 40px;
+        transition: background 0.3s;
+        -webkit-transition: background 0.3s;
+        -moz-transition: background 0.3s;
+        -ms-transition: background 0.3s;
+        -o-transition: background 0.3s;
+    }
+    input[type="checkbox"] {
+     display: inline-block; 
+}
+</style>
+
+<div class="row">
+
+    <div class="col-lg-12 col-md-12 col-sm-12 register-account">
+
+        <div class="carousel-heading no-margin">
+            <h4>Đăng ký</h4>
+        </div>
+        @using (Ajax.BeginForm("Register", "FTeam", null, new AjaxOptions()
+        {
+            UpdateTargetId = "mm-content",
+            HttpMethod = "POST",
+            //OnSuccess = "loadRegister",
+            //OnComplete = "loadRegisterC"
+
+
+        }, new { }))
+        {
+            <div class="page-content">
+                <div class="row">
+
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+                        <p><strong>Vui lòng cung cấp thông tin</strong></p>
+                    </div>
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    @if (TempData["Success"] != null)
+                    {
+                        <script>
+                            thongbao2sop("Thông báo ", "Thao tác thành công");
+                        </script>
+                    }
+                    @if (ViewData["Error"] != null)
+                    {
+                        if (@ViewData["Error"].ToString().Equals("1"))
+                        {
+                            <script>
+
+                                  thongbao2s("Thông báo lỗi", "Thao tác thất bại");
+                            </script>
+                        }
+
+                        
+                    }
+                    <div class="col-lg-4 col-md-4 col-sm-4">
+                        <p>E-Mail*</p>
+                    </div>
+                    <div class="col-lg-8 col-md-8 col-sm-8 em">
+                        @Html.EditorFor(model => model.Email, new { htmlAttributes = new {  } })
+                        
+                        @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+
+
+                    </div>
+
+                </div>
+                <div class="row">
+
+                    <div class="col-lg-4 col-md-4 col-sm-4">
+                        <p>Họ tên*</p>
+                    </div>
+                    <div class="col-lg-8 col-md-8 col-sm-8">
+                        @Html.EditorFor(model => model.TenKH, new { htmlAttributes = new { } })
+
+                        @Html.ValidationMessageFor(model => model.TenKH, "", new { @class = "text-danger" })
+                    </div>
+
+                </div>
+                <div class="row">
+
+                    <div class="col-lg-4 col-md-4 col-sm-4">
+                        <p>Tài khoản*</p>
+                    </div>
+                    <div class="col-lg-8 col-md-8 col-sm-8">
+                        @Html.EditorFor(model => model.TaiKhoan, new { htmlAttributes = new { } })
+
+                        @Html.ValidationMessageFor(model => model.TaiKhoan, "", new { @class = "text-danger" })
+                    </div>
+
+                </div>
+
+
+
+                <div class="row">
+
+                    <div class="col-lg-4 col-md-4 col-sm-4">
+                        <p>Mật khẩu</p>
+                    </div>
+                    <div class="col-lg-8 col-md-8 col-sm-8 em">
+                        @Html.EditorFor(model => model.MatKhau, new { htmlAttributes = new { } })
+
+                        @Html.ValidationMessageFor(model => model.MatKhau, "", new { @class = "text-danger" })
+                    </div>
+
+                </div>
+
+                <div class="row">
+
+                    <div class="col-lg-4 col-md-4 col-sm-4">
+                        <p>Xác nhận mật khẩu</p>
+                    </div>
+                    <div class="col-lg-8 col-md-8 col-sm-8">
+                        @Html.EditorFor(model => model.Confirm, new { htmlAttributes = new { } })
+
+                        @Html.ValidationMessageFor(model => model.Confirm, "", new { @class = "text-danger" })
+                    </div>
+
+                </div>
+
+
+
+
+
+
+
+
+
+
+
+                <div class="row">
+
+                    <div class="col-lg-4 col-md-4 col-sm-4">
+                        <p>Địa chỉ</p>
+                    </div>
+                    <div class="col-lg-8 col-md-8 col-sm-8">
+                        @Html.EditorFor(model => model.DiaChi, new { htmlAttributes = new { } })
+
+                        @Html.ValidationMessageFor(model => model.DiaChi, "", new { @class = "text-danger" })
+                    </div>
+
+                </div>
+
+
+
+
+                <div class="row">
+
+                    <div class="col-lg-4 col-md-4 col-sm-4">
+                        <p>Điện thoại</p>
+                    </div>
+                    <div class="col-lg-8 col-md-8 col-sm-8">
+                        @Html.EditorFor(model => model.SDT, new { htmlAttributes = new { } })
+
+                        @Html.ValidationMessageFor(model => model.SDT, "", new { @class = "text-danger" })
+                    </div>
+
+                </div>
+
+                <div class="row">
+
+
+
+                </div>
+
+                <div class="row">
+
+                    <div class="col-lg-4 col-md-4 col-sm-4">
+                        
+                    </div>
+                    <div class="col-lg-8 col-md-8 col-sm-8">
+                        
+                    </div>
+
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+                        <input class="big" type="submit" value="Đăng ký">
+                        <input class="big" type="reset" value="Huỷ">
+                    </div>
+
+                </div>
+            </div>
+        }
+        
+
+    </div>
+
+</div>
+<script src="~/Scripts/jspage.js"></script>
+<script>
+    var loadPG = function () {
+        $.ajax({
+            url: "/FTeam/Index",
+            type: "GET",
+            success: function (result) {
+                $('#mm-content').html(result);
+            }
+        });
+    }
+    var thongbao2sop = function (strtitle, msg) {
+        swal({
+            title: strtitle,
+            text: msg,
+            timer: 2000,
+            showConfirmButton: false
+        },
+        function () {
+            
+            location.href = "/FTeam/Index";
+        }
+        );
+    }
+    
+</script>

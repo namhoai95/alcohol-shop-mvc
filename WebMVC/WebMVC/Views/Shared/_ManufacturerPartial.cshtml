@@ -1,0 +1,21 @@
+﻿@using WebMVC.Models
+@model List<Manufacturer>
+
+<div class="col-lg-12 col-md-12 col-sm-12">
+
+    <div class="sidebar-box-heading">
+        <i class="icons icon-tag-6"></i>
+        <h4>Thương hiệu</h4>
+    </div>
+
+    <div class="sidebar-box-content sidebar-padding-box">
+        @foreach (Manufacturer m in Model)
+        {
+            @Html.Raw(@Ajax.ActionLink("manu", "M", "Manufacturersz", new { id = m.ID },
+                                new AjaxOptions { UpdateTargetId = "mm-content", OnSuccess="loadC" },
+                                new { @class = "AjaxLink tag-item" }).ToHtmlString().Replace("manu", m.TenHangSanXuat))
+        }
+    </div>
+
+</div>
+<script src="~/Scripts/jspage.js"></script>

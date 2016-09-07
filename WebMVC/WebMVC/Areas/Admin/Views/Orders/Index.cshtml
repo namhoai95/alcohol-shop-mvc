@@ -1,0 +1,153 @@
+﻿@model PagedList.IPagedList<WebMVC.Models.Order>
+@using PagedList.Mvc;
+@{
+    Layout = Request.IsAjaxRequest() ? null : "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+@{
+    ViewBag.Title = "Quản lý thông tin đặt hàng";
+}
+<link href="~/Scripts/vendors/jplist/html/css/vendor/jquery-ui.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-3.0.0.js"></script>
+<script src="~/Scripts/jquery-ui.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#txtName").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/Admin/Orders/autoCompleteSeach",
+                    type: "POST",
+                    dataType: "json",
+                    data: { Prefix: request.term },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return { label: item.TenKH, value: item.TenKH };
+                        }))
+                    }
+                })
+            },
+            messages: {
+                noResults: "", results: ""
+            }
+        });
+    })
+</script>
+<div class="page-content">
+    <div class="table-container">
+        <div class="row mbl">
+            <div class="col-lg-6">
+                <div class="input-group input-group-sm mbs">
+
+                    @using (Ajax.BeginForm("Search", "Orders", null, new AjaxOptions()
+                    {
+                        UpdateTargetId = "m-content",
+                        HttpMethod = "POST"
+
+                    }, new { @class = "form-horizontal form-seperated", role = "form" }))
+                    {
+                        <div class="col-lg-12">
+                            <div class="col-lg-6">
+                                <input id="txtName" class="form-control" type="text" placeholder="Nhập tên khách hàng..." name="txtName" />
+                            </div>
+                            <div class="col-lg-3">
+                                <span class="input-group-btn">
+                                    <input class="btn btn-success dropdown-toggle" type="submit" name="seach" value="Tìm kiếm" />
+                                </span>
+                            </div>
+                            <div class="col-lg-3">
+                                <span class="input-group-btn">
+                                    <button type="button" class="btn btn-success dropdown-toggle" style="margin-left: 54px;">
+                                        @Html.Raw(@Ajax.ActionLink("return", "Index", "Orders", null,
+                                        new AjaxOptions
+                                        {
+                                            UpdateTargetId = "m-content"
+                                        }, new { @class = "AjaxLink" }).ToHtmlString().Replace("return", "Danh sách"))
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-blue">
+            <div class="panel-heading col-lg-12">
+                <div class="caption col-lg-3">Danh sách hóa đơn</div>
+                <div class="actions col-lg-3">
+                    @Html.Raw(@Ajax.ActionLink("return", "LoadDHXacNhan", "Orders", null,
+                    new AjaxOptions
+                    {
+                        UpdateTargetId = "m-content"
+                    }, new { @class = "AjaxLink btn btn-info btn-sm" }).ToHtmlString().Replace("return", "Đơn hàng đã xác nhận"))
+                </div>
+                <div class="actions col-lg-3">                    
+                    @Html.Raw(@Ajax.ActionLink("return", "PendingApproval", "Orders", null,
+                    new AjaxOptions
+                    {
+                        UpdateTargetId = "m-content"
+                    }, new { @class = "AjaxLink btn btn-info btn-sm" }).ToHtmlString().Replace("return", "Đơn hàng đang chờ xét duyệt"))
+                </div>
+                <div class="actions col-lg-3">                 
+                    @Html.Raw(@Ajax.ActionLink("return", "LoadDHDaHuy", "Orders", null,
+                    new AjaxOptions
+                    {
+                        UpdateTargetId = "m-content"
+                    }, new { @class = "AjaxLink btn btn-info btn-sm" }).ToHtmlString().Replace("return", "Đơn hàng đã hủy"))
+                </div>
+            </div>
+            <div class="panel-body">
+                <table class="table table-hover table-striped table-bordered table-advanced tablesorter">
+                    <thead>
+                        <tr>
+                            <th class="talbe-head" width="">Mã đơn hàng</th>
+                            <th class="talbe-head" width="">Ngày đặt</th>
+                            <th class="talbe-head" width="">Ngày giao</th>
+                            <th class="talbe-head" width="">Số lượng</th>
+                            <th class="talbe-head" width="">Tổng tiền</th>                           
+                            <th class="talbe-head" width="">Khách hàng</th>
+                            <th class="talbe-head" width="">Tình trạng</th>
+                            <th class="talbe-head" width="">Thao tác</th>
+                        </tr>
+                    </thead>
+                        
+                    <tbody>
+                        @{ int i = 1;}
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.MaHD</td>
+                                <td>@item.NgayDatHang</td>
+                                <td>@item.NgayGiaoHang</td>
+                                <td>@item.SoLuong</td>
+                                <td>@item.TongTien</td>                                
+                                <td>@item.Customer.TenKH</td>
+                                <td>@item.TrangThai.TenTrangThai</td>
+                                <td>
+                                    @Html.Raw(@Ajax.ActionLink("edit", "Index", "OrderDetails",
+                                    new { id = item.ID },
+                                    new AjaxOptions { UpdateTargetId = "m-content" },
+                                    new { @class = "AjaxLink btn btn-danger btn-xs" }).ToHtmlString().Replace("edit", "<i class='fa info-circle' aria-hidden='true'></i>&nbsp;Xem"))
+                                    @if (item.TinhTrang != 4)
+                                    {
+                                        @Html.Raw(@Ajax.ActionLink("edit", "Edit", "Orders",
+                                        new { id = item.ID },
+                                        new AjaxOptions { UpdateTargetId = "m-content" },
+                                        new { @class = "AjaxLink btn btn-danger btn-xs" }).ToHtmlString().Replace("edit", "<i class='fa info-circle' aria-hidden='true'></i>&nbsp;Xác nhận"))
+                                    }
+                                    @Html.Raw(@Ajax.ActionLink("edit", "Delete", "Orders",
+                                    new { id = item.ID },
+                                    new AjaxOptions { UpdateTargetId = "m-content" },
+                                    new { @class = "AjaxLink btn btn-danger btn-xs" }).ToHtmlString().Replace("edit", "<i class='fa info-circle' aria-hidden='true'></i>&nbsp;Hủy"))
+                                 </td>
+                            </tr>
+                            i++;
+                        }
+                    </tbody>
+                    
+                </table>
+
+                @Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
+            </div>
+        </div>
+    </div>
+</div>

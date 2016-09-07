@@ -1,0 +1,59 @@
+﻿@using WebMVC.ViewModels
+@model WebMVC.ViewModels.CompareView
+
+<div class="sidebar-box-content">
+    @if (Model.listItem.Count() <= 0)
+    {
+        <p>Bạn chưa có sản phẩm so sánh nào.</p>
+    }
+    <table class="compare-table">
+       
+        @foreach (var item in Model.listItem)
+        {
+            <tr>
+                <td class="product-thumbnail"><img src="@item.url_img" alt="@item.TenSanPham"></td>
+                <td class="product-info">
+                    <p><a href="#">@item.TenSanPham</a></p>
+                    @*<a href="#" class="remove">Xoá</a>*@
+                    @Html.Raw(@Ajax.ActionLink("lthemab", "Remove", "Cartz", new { id = item.ID },
+                        new AjaxOptions
+                        {
+                            HttpMethod = "POST",
+                            OnSuccess = "loadCompare"
+                        }, new { @class = "remove", title = "Xoá" })
+                                   .ToHtmlString()
+                                   .Replace("lthemab", "Xoá"))
+                </td>
+            </tr>
+        }
+        
+
+        
+
+    </table>
+    <div class="padding-box">
+        
+        @Html.Raw(@Ajax.ActionLink("new", "Index", "Cartz", null,
+             new AjaxOptions { UpdateTargetId = "mm-content", OnSuccess="loadC" },
+             new { @class = "AjaxLink button grey" }).ToHtmlString().Replace("new", "So sánh"))
+    </div>
+</div>
+<script src="~/Scripts/jspage.js"></script>
+<script>
+    var loadCompare = function (result) {
+        console.log(result)
+        if (result.error == -1) {
+            console.log("Loi ....")
+            //thongbao2s("Thông báo", "Vui lòng đăng nhập")
+        } else {
+            thongbaosuccess2s("Thông báo", "Thành công !")
+            $.ajax({
+                url: "/Cartz/ComparePartialView",
+                type: "GET",
+                success: function (result) {
+                    $('#compare-content').html(result);
+                }
+            });
+        }
+    }
+</script>

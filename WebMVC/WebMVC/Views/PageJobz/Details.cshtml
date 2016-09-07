@@ -1,0 +1,65 @@
+﻿@model WebMVC.Models.Job
+
+@{
+    Layout = Request.IsAjaxRequest() ? null : "~/Views/Shared/_LayoutIndex.cshtml";
+}
+@{
+    ViewBag.Title = "Tin tức";
+}
+
+<div class="row">
+
+    <div class="col-lg-12 col-md-12 col-sm-12">
+
+        <div class="carousel-heading">
+            <h4>Thông tin bài viết</h4>
+        </div>
+
+    </div>
+
+    <div class="col-lg-12 col-md-12 col-sm-12">
+
+        <div class="blog-item">
+            <img src="@Model.img" alt="">
+            <div class="blog-info">
+                <div class="blog-meta">
+                    <span class="date">
+                        <i class="icons icon-clock"></i>
+                        <span>@string.Format("{0}-{1}-{2}", Convert.ToDateTime(Model.day).Day, Convert.ToDateTime(Model.day).Month, Convert.ToDateTime(Model.day).Year)</span>
+                    </span>
+                    <span class="cat">
+                        <i class="icons icon-tag"></i>
+                        <span>@Model.tag</span>
+                    </span>
+                    <span class="views">
+                        <i class="icons icon-eye-1"></i>
+                        <span>@ViewBag.CurTime</span>
+                    </span>
+                </div>
+                <div runat="server" id="txtCon">
+                    @Html.Raw(Model.contents)
+                </div>
+                <div class="social-share">
+                    <!-- Place this tag where you want the +1 button to render. -->
+                    <div class="g-plusone" data-size="medium"></div>
+
+                    <!-- Place this tag after the last +1 button tag. -->
+                    <script type="text/javascript">
+								(function() {
+								var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+								po.src = 'https://apis.google.com/js/platform.js';
+								var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+								})();
+                    </script>
+                    <a data-pin-do="buttonPin" data-pin-count="beside" href="https://www.pinterest.com/pin/create/button/?url=https%3A%2F%2Fwww.pinterest.com%2Fbutadien521993%2Fentbrew%2F6851755809%2F&media=https%3A%2F%2Ffarm8.staticflickr.com%2F7027%2F6851755809_df5b2051c9_z.jpg&description=Next%20stop%3A%20Pinterest"><img src="//assets.pinterest.com/images/pidgets/pinit_fg_en_rect_gray_20.png" /></a>
+                    <!-- Please call pinit.js only once per page -->
+                    <script type="text/javascript" async src="//assets.pinterest.com/js/pinit.js"></script>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+</div>

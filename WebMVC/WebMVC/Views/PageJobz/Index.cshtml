@@ -1,0 +1,157 @@
+﻿@using WebMVC.Models
+@model List<Job>
+
+@{
+    Layout = Request.IsAjaxRequest() ? null : "~/Views/Shared/_LayoutIndex.cshtml";
+}
+@{
+    ViewBag.Title = "Tin tức";
+}
+<style>
+    .blogi a img {
+        width: 420px !important;
+        height: 250px !important;
+    }
+
+    .blog-item1 {
+        margin-bottom: 30px;
+        overflow: hidden;
+    }
+</style>
+<div class="row">
+
+    <div class="col-lg-12 col-md-12 col-sm-12">
+        <div class="carousel-heading">
+            <h4>Thông tin bài viết</h4>
+        </div>
+    </div>
+
+    <div class="col-lg-12 col-md-12 col-sm-12">
+        <!-- item 1-->
+        <div class="blog-item">
+            @Html.Raw(@Ajax.ActionLink("job", "Details", "PageJobz", new { id = Model[0].id },
+                    new AjaxOptions { UpdateTargetId = "mm-content", OnSuccess = "loadC" },
+                    new { @class = "AjaxLink" }).ToHtmlString().Replace("job", "<img src='" + Model[0].img + "' alt='News1'>"))
+            <div class="blog-info">
+                <h3>
+                    @Html.Raw(@Ajax.ActionLink("job", "Details", "PageJobz", new { id = Model[0].id },
+                                new AjaxOptions { UpdateTargetId = "mm-content", OnSuccess = "loadC" },
+                                new { @class = "AjaxLink" }).ToHtmlString().Replace("job", Model[0].title))
+                </h3>
+                <div class="blog-meta">
+                    <span class="date">
+                        <i class="icons icon-clock"></i>
+                        @string.Format("{0}-{1}-{2}", Convert.ToDateTime(Model[0].day).Day, Convert.ToDateTime(Model[0].day).Month, Convert.ToDateTime(Model[0].day).Year)
+                    </span>
+                    <span class="cat">
+                        <i class="icons icon-tag"></i>
+                        <span>@Model[0].tag</span>
+                    </span>
+                    <span class="views">
+                        <i class="icons icon-eye-1"></i>
+                        <span>
+                            @{ 
+                                Decimal d = Decimal.Parse((DateTime.Now.Ticks / 1000).ToString());
+                                long k = long.Parse((d - Model[0].id).ToString());
+                                TimeSpan elapsedSpan = new TimeSpan(k);
+                                double kc = elapsedSpan.TotalMilliseconds;
+                                string curtime = "";
+                                if (kc < 60000)
+                                {
+                                    curtime = ((int)(kc / 1000) + " giây trước");
+                                }
+                                else if (kc < 3600000)
+                                {
+                                    curtime = ((int)(kc / 60000) + " phút trước");
+                                }
+                                else if (kc < (24 * 3600000))
+                                {
+                                    curtime = ((int)(kc / 3600000) + " giờ trước");
+                                }
+                                else
+                                {
+                                    curtime = ((int)(kc / (24 * 36000000)) + " ngày trước");
+                                }
+                            }  
+                            @curtime;
+                        </span>
+                    </span>
+                </div>
+                <div runat="server" id="txtCon">
+                    @Html.Raw(Model[0].contents.Length > 150 ? Model[0].contents.Substring(0, 150) + "....." : Model[0].contents + ".....")
+                    @Html.Raw(@Ajax.ActionLink("job", "Details", "PageJobz", new { id = Model[0].id },
+                                new AjaxOptions { UpdateTargetId = "mm-content", OnSuccess = "loadC" },
+                                new { @class = "AjaxLink" }).ToHtmlString().Replace("job", "Xem thêm"))
+                </div>
+            </div>
+        </div>
+        <!-- item  1 end -->
+    </div>
+</div>
+
+<div class="row">
+    @for (int i = 1; i < 5; i++)
+    {
+        <div class="col-lg-6 col-md-6 col-sm-12">
+            <!-- item 1-->
+            <div class="blog-item blogi">
+                @Html.Raw(@Ajax.ActionLink("job", "Details", "PageJobz", new { id = Model[i].id },
+                    new AjaxOptions { UpdateTargetId = "mm-content", OnSuccess = "loadC" },
+                    new { @class = "AjaxLink" }).ToHtmlString().Replace("job", "<img src='" + Model[i].img + "' alt='News1'>"))
+                <div class="blog-info">
+                    <h3>
+                        @Html.Raw(@Ajax.ActionLink("job", "Details", "PageJobz", new { id = Model[i].id },
+                                new AjaxOptions { UpdateTargetId = "mm-content", OnSuccess = "loadC" },
+                                new { @class = "AjaxLink" }).ToHtmlString().Replace("job", Model[i].title))
+                    </h3>
+                    <div class="blog-meta">
+                        <span class="date">
+                            <i class="icons icon-clock"></i>
+                            @string.Format("{0}-{1}-{2}", Convert.ToDateTime(Model[i].day).Day, Convert.ToDateTime(Model[i].day).Month, Convert.ToDateTime(Model[i].day).Year)
+                        </span>
+                        <span class="cat">
+                            <i class="icons icon-tag"></i>
+                            <span>@Model[i].tag</span>
+                        </span>
+                        <span class="views">
+                            <i class="icons icon-eye-1"></i>
+                            <span>
+                                @{
+                                    Decimal d1 = Decimal.Parse((DateTime.Now.Ticks / 1000).ToString());
+                                    long k1 = long.Parse((d - Model[i].id).ToString());
+                                    TimeSpan elapsedSpan1 = new TimeSpan(k);
+                                    double kc1 = elapsedSpan1.TotalMilliseconds;
+                                    string curtime1 = "";
+                                    if (kc < 60000)
+                                    {
+                                        curtime1 = ((int)(kc / 1000) + " giây trước");
+                                    }
+                                    else if (kc < 3600000)
+                                    {
+                                        curtime1 = ((int)(kc / 60000) + " phút trước");
+                                    }
+                                    else if (kc < (24 * 3600000))
+                                    {
+                                        curtime1 = ((int)(kc / 3600000) + " giờ trước");
+                                    }
+                                    else
+                                    {
+                                        curtime1 = ((int)(kc / (24 * 36000000)) + " ngày trước");
+                                    }
+                                }
+                                @curtime1;
+                            </span>
+                        </span>
+                    </div>
+                    <div runat="server" id="txtCon">
+                        @Html.Raw(Model[i].contents.Length > 150 ? Model[i].contents.Substring(0, 150) + "....." : Model[i].contents + ".....")
+                        @Html.Raw(@Ajax.ActionLink("job", "Details", "PageJobz", new { id = Model[i].id },
+                                new AjaxOptions { UpdateTargetId = "mm-content", OnSuccess = "loadC" },
+                                new { @class = "AjaxLink" }).ToHtmlString().Replace("job", "Xem thêm"))
+                    </div>
+                </div>
+            </div>
+            <!-- item  1 end -->
+        </div>
+    }
+</div>

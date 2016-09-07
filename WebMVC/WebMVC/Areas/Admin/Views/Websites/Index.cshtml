@@ -1,0 +1,110 @@
+﻿@model IEnumerable<WebMVC.Models.Website>
+@{
+    Layout = Request.IsAjaxRequest() ? null : "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+@{
+    ViewBag.Title = "Quản lý thông tin website";
+}
+
+
+
+<div class="page-content">
+    <div id="table-advanced" class="row">
+        <div class="col-lg-12">
+            <ul id="tableadvancedTab" class="nav nav-tabs">
+                <li class="active"><a href="#table-sorter-tab" data-toggle="tab">Thông tin</a></li>
+                <li>
+
+                    @Html.Raw(@Ajax.ActionLink("lthema1", "Create", "Websites", null,
+                                   new AjaxOptions
+                                   {
+                                       UpdateTargetId = "m-content"
+                                   }, new { @class = "AjaxLink" }).ToHtmlString().Replace("lthema1", "Cập nhật mới"))
+
+
+
+                </li>
+
+            </ul>
+            <style>
+                #m-content-table tbody tr td a {
+                    color: white !important;
+                }
+
+                #m-content-table tbody tr td .detailz a {
+                    color: #999999 !important;
+                }
+            </style>
+            <div id="tableadvancedTabContent" class="tab-content">
+                <div id="table-sorter-tab" class="tab-pane fade in active">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h3 class="mtn">Thông tin được cập nhật mới nhất</h3>
+                            <table class="table table-hover table-striped table-bordered table-advanced tablesorter" id="m-content-table">
+                                <thead>
+                                    <tr>
+                                        <th width="3%"><input type="checkbox" class="checkall" /></th>
+                                        <th width="5%">##</th>
+                                        <th width="10%">@Html.DisplayNameFor(model => model.tenshop)</th>
+                                        <th width="">@Html.DisplayNameFor(model => model.sdt1)</th>
+                                        <th width="">@Html.DisplayNameFor(model => model.sdt2)</th>
+                                        <th width="10%">@Html.DisplayNameFor(model => model.email)</th>
+                                        <th width="">@Html.DisplayNameFor(model => model.skype)</th>
+                                        <th width="">@Html.DisplayNameFor(model => model.facebook)</th>
+                                        <th width="15%">Thao tác</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{ int i = 1;}
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td><input type="checkbox" /></td>
+                                            <td>@i</td>
+                                            <td>@item.tenshop</td>
+                                            <td>
+                                                @item.sdt1
+                                            </td>
+
+                                            <td>@item.sdt2</td>
+
+                                            <td>@item.email</td>
+                                            <td>@item.skype</td>
+                                            <td>@item.facebook</td>
+                                            <td>
+                                                <button type="button" class="btn btn-danger btn-xs">
+                                                    @Html.Raw(@Ajax.ActionLink("btn" + i, "Details", "Websites", new { id = item.id }, new AjaxOptions { UpdateTargetId = "m-content" }, new { @class = "AjaxLink" }).ToHtmlString().Replace("btn" + i, "<i class='fa info-circle' aria-hidden='true'></i>&nbsp;Xem"))
+
+                                                </button>
+                                                <button type="button" class="btn btn-danger btn-xs">
+                                                    @Html.Raw(@Ajax.ActionLink("btn" + i, "Edit", "Websites", new { id = item.id }, new AjaxOptions { UpdateTargetId = "m-content" }, new { @class = "AjaxLink" }).ToHtmlString().Replace("btn" + i, "<i class='fa fa-pencil-square-o' aria-hidden='true'></i>&nbsp;Cập nhật"))
+
+                                                </button>
+                                                
+
+                                            </td>
+                                        </tr>
+                                        i++;
+                                    }
+
+
+
+
+                                </tbody>
+                            </table>
+                            <hr class="mtxl mbxl" />
+
+
+                        </div>
+                    </div>
+                </div>
+                <div id="table-color-tab" class="tab-pane fade">
+                    <div class="row" id="tab-create-account">
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

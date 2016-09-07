@@ -1,0 +1,86 @@
+﻿@model WebMVC.Models.Contact
+
+@if (ViewData["ThongBao"] != null)
+{
+    if (@ViewData["ThongBao"].ToString().Equals("1"))
+    {
+        <script>
+            thongbao2s("Thông báo", "Bạn đã gửi liên hệ thành công");
+        </script>
+    }
+    else if(@ViewData["ThongBao"].ToString().Equals("-1"))
+    {
+        <script>
+            thongbao2s("Thông báo lỗi", "Gửi không thành công");
+        </script>
+    }
+}
+
+<div class="carousel-heading no-margin">
+    <h4>Liên hệ</h4>
+</div>
+@using (Ajax.BeginForm("SendContactPartialView", "FTeam", null, new AjaxOptions()
+{
+    UpdateTargetId = "form-contact",
+    HttpMethod = "POST",
+}, new { @class = "page-content contact-form" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="portlet-body">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.name, "Tên(*)")
+            <br />
+            @Html.EditorFor(model => model.name, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.name, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.email, "Email(*)")
+            <br />
+            @Html.EditorFor(model => model.email, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.email, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.tieude, "Tiêu đề(*)")
+            <br />
+            @Html.EditorFor(model => model.tieude, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.tieude, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.noidung, "Nội dung(*)")
+            <br />
+            @Html.TextAreaFor(model => model.noidung, new { htmlAttributes = new { @class = "form-control", @style = "width: 100%; height:100px;" } })
+            @Html.ValidationMessageFor(model => model.noidung, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group">
+            <button type="submit" class="big">GỬI</button>
+        </div>
+
+    </div>
+}
+<script src="~/Scripts/jspage.js"></script>
+
+<script>
+    var loadE = function (result) {
+        console.log(result)
+        if (result.error == -1) {
+            console.log("Loi ....")
+            //thongbao2s("Thông báo", "Vui lòng đăng nhập")
+        } else if (result.error == -2) {
+            thongbao2s("Thông báo", "Gửi liên hệ không thành công !")
+        } else {
+            thongbaosuccess2s("Thông báo", "Thành công !")
+            $.ajax({
+                url: "/FTeam/SendContactPartialView",
+                type: "GET",
+                success: function (result) {
+                    $('#form-contact').html(result);
+                }
+            });
+        }
+    }
+</script>
